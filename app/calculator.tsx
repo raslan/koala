@@ -47,7 +47,7 @@ export default function HomePage() {
       <div className='flex flex-col lg:flex-row py-8 max-w-xl gap-4'>
         <Button
           onClick={() => {
-            setEntry('$10 * 2 + 10 * 20000egp + eur10000 / 4 - 5USD');
+            setEntry('(10 * 2 + 10 * (20000egp + eur10000) / 4 - 5) + 10000');
             toast.info('Demo equation entered.', {
               position: 'top-right',
             });
