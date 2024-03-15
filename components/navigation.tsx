@@ -69,9 +69,6 @@ export default function Sidebar() {
           <Separator className='bg-transparent' />
         </>
       ))}
-      <div className='w-full flex items-center justify-center'>
-        <ModeToggle />
-      </div>
     </div>
   );
 }

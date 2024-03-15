@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { ComboBoxResponsive } from '@/components/ui/combobox';
 import { Heading } from '@/components/ui/heading';
-import { Label } from '@/components/ui/label';
+import { ModeToggle } from '@/components/ui/mode-toggle';
 import { OutputBlock } from '@/components/ui/output-block';
 import { Textarea } from '@/components/ui/textarea';
 import useCurrency from '@/hooks/useCurrency';
@@ -43,6 +43,7 @@ export default function HomePage() {
   return (
     <div>
       <Heading>Home</Heading>
+
       <div className='flex flex-col lg:flex-row py-8 max-w-xl gap-4'>
         <Button
           onClick={() => {
