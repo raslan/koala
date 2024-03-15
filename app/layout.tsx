@@ -35,9 +35,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className='flex w-full h-full pb-16 lg:pb-0'>
+          <div className='flex w-full h-full pb-32 lg:pb-0'>
             <Navigation />
-            <div className='w-full p-8 overflow-y-auto min-h-screen'>
+            <div className='w-full px-8 py-24 lg:p-8 overflow-y-auto min-h-screen'>
               {children}
             </div>
           </div>
