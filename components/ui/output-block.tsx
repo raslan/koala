@@ -9,9 +9,9 @@ export const OutputBlock = ({
   baseCurrency: string;
 }) => {
   return (
-    <div className='animate-in mt-12 duration-700 transform'>
+    <div className='animate-in mt-6 duration-700 transform'>
       <TypewriterEffect
-        className='m-auto'
+        className='m-auto text-2xl'
         words={`${result}`.split(' ').map((w) => ({
           text: w,
         }))}

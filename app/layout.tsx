@@ -3,7 +3,8 @@ import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import Sidebar from '@/components/sidebar';
+import Navigation from '@/components/navigation';
+import { Toaster } from '@/components/ui/sonner';
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -24,7 +25,7 @@ export default function RootLayout({
     <html className='antialiased' lang='en' suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased',
+          'min-h-screen h-full bg-background font-sans antialiased',
           fontSans.variable
         )}
       >
@@ -34,10 +35,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className='flex w-full h-full'>
-            <Sidebar />
-            <div className='w-full p-8'>{children}</div>
+          <div className='flex w-full h-full pb-16 lg:pb-0'>
+            <Navigation />
+            <div className='w-full p-8 overflow-y-auto min-h-screen'>
+              {children}
+            </div>
           </div>
+          <Toaster className='dark:brightness-150' richColors />
         </ThemeProvider>
       </body>
     </html>
