@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import './globals.css';
+import { ClerkProvider } from '@clerk/nextjs';
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -12,7 +13,7 @@ export const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: 'Koala',
+  title: 'Koalify',
   description: 'A financial calculator for the future.',
 };
 
@@ -22,28 +23,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className='antialiased' lang='en' suppressHydrationWarning>
-      <body
-        className={cn(
-          'min-h-screen h-full bg-background font-sans antialiased',
-          fontSans.variable
-        )}
-      >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
+    <ClerkProvider>
+      <html className='antialiased' lang='en' suppressHydrationWarning>
+        <body
+          className={cn(
+            'min-h-screen h-full bg-background font-sans antialiased',
+            fontSans.variable
+          )}
         >
-          <div className='flex w-full h-full pb-32 lg:pb-0'>
-            <Navigation />
-            <div className='w-full px-8 py-24 lg:p-8 overflow-y-auto min-h-screen'>
-              {children}
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className='flex w-full h-full pb-32 lg:pb-0'>
+              <Navigation />
+              <div className='w-full px-8 py-24 lg:p-8 overflow-y-auto min-h-screen'>
+                {children}
+              </div>
             </div>
-          </div>
-          <Toaster className='dark:brightness-150' richColors />
-        </ThemeProvider>
-      </body>
-    </html>
+            <Toaster className='dark:brightness-150' richColors />
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

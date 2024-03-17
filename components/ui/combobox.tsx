@@ -43,8 +43,8 @@ export function ComboBoxResponsive({
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
-            variant='default'
-            className='w-auto justify-start bg-slate-700 dark:bg-slate-200'
+            variant='ghost'
+            className='w-auto justify-start border-slate-700 dark:border-slate-200 border-2'
           >
             {selected ? <>{selected.label}</> : <>+ Set Option</>}
           </Button>

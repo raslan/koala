@@ -1,14 +1,13 @@
 'use client';
 
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import Link from 'next/link';
 import CalculatorIcon from '@/components/icons/calculator';
 import EuroIcon from '@/components/icons/euro';
+import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { ModeToggle } from '@/components/ui/mode-toggle';
-import { useMediaQuery } from 'usehooks-ts';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { useMediaQuery } from 'usehooks-ts';
 
 const pages = [
   {

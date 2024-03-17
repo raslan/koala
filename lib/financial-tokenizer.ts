@@ -1,15 +1,5 @@
 import * as Currencies from '@dinero.js/currencies';
-import {
-  dinero,
-  convert,
-  Rates,
-  Dinero,
-  toDecimal,
-  add,
-  subtract,
-  multiply,
-} from 'dinero.js';
-
+import { Dinero, Rates, convert, dinero, toDecimal } from 'dinero.js';
 import { evaluate } from 'mathjs';
 
 const transformer = ({ value, currency }: any) => {
@@ -19,7 +9,7 @@ const transformer = ({ value, currency }: any) => {
   })}`;
 };
 
-export const isDinero = (object: any) => {
+export const isDinero = (object: Record<string, unknown>) => {
   return object && typeof object.toJSON === 'function';
 };
 
@@ -84,7 +74,7 @@ const dineroFromFloat = ({
   return dinero({ amount, currency });
 };
 
-const prettyPrint = (el: Dinero<number>) =>
+export const prettyPrint = (el: Dinero<number>) =>
   toDecimal(el as Dinero<number>, transformer);
 
 const isNaN = (input: any): boolean => {
@@ -196,16 +186,14 @@ export const evaluateNaturalExpression = (
     const val = `${baseCurrency}${evaluate(
       formattedTokens
         .map((token) =>
-          isDinero(token) ? toDecimal(token as Dinero<number>) : token
+          isDinero(token as Dinero<number>)
+            ? toDecimal(token as Dinero<number>)
+            : token
         )
         .join(' ')
     )}`;
-    return prettyPrint(
-      strToDinero(val, baseCurrency, baseCurrencyExchangeRates)
-    );
-    // return prettyPrint(evaluateExpressionRecursive(formattedTokens));
+    return strToDinero(val, baseCurrency, baseCurrencyExchangeRates);
   } catch (error) {
-    console.log(error);
-    return 'Invalid input.';
+    throw new Error();
   }
 };

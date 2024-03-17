@@ -2,9 +2,15 @@ const About = () => {
   return (
     <div>
       <footer className=''>
-        <a href='https://www.flaticon.com/free-icons/koala' title='koala icons'>
-          Koala icons created by Xinh Studio - Flaticon
-        </a>
+        Koala by parkjisun from{' '}
+        <a
+          href='https://thenounproject.com/browse/icons/term/koala/'
+          target='_blank'
+          title='Koala Icons'
+        >
+          Noun Project
+        </a>{' '}
+        (CC BY 3.0)
       </footer>
     </div>
   );
