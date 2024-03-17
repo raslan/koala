@@ -9,7 +9,7 @@ const About = () => {
           title='Koala Icons'
         >
           Noun Project
-        </a>{' '}
+        </a>
         (CC BY 3.0)
       </footer>
     </div>
