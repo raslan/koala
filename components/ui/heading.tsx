@@ -3,7 +3,7 @@ import { ModeToggle } from './mode-toggle';
 import { Button } from './button';
 import AppIcon from '../icons/app';
 
-export const Heading = ({ children }: { children: string }) => {
+export const Heading = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className='flex justify-between items-start'>
       <div className='flex lg:gap-3 items-center'>
