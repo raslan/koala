@@ -44,7 +44,7 @@ export function ComboBoxResponsive({
         <PopoverTrigger asChild>
           <Button
             variant='ghost'
-            className='w-auto justify-start border-slate-700 dark:border-slate-200 border-2'
+            className='w-auto justify-start border-gray-700 dark:border-gray-200 border-2'
           >
             {selected ? <>{selected.label}</> : <>+ Set Option</>}
           </Button>
@@ -65,7 +65,7 @@ export function ComboBoxResponsive({
       <DrawerTrigger asChild>
         <Button
           variant='default'
-          className='w-auto justify-start bg-slate-700 dark:bg-slate-200'
+          className='w-auto justify-start bg-gray-700 dark:bg-gray-200'
         >
           {selected ? <>{selected.label}</> : <>+ Set Option</>}
         </Button>

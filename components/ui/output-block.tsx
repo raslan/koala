@@ -16,7 +16,7 @@ export const OutputBlock = ({
           text: w,
         }))}
       />
-      <h3 className='scroll-my-10 mt-4 pb-2 text-2xl font-semibold text-slate-600 dark:text-slate-300 tracking-tight transition-colors first:mt-0 text-center'>
+      <h3 className='scroll-my-10 mt-4 pb-2 text-2xl font-semibold text-gray-600 dark:text-gray-300 tracking-tight transition-colors first:mt-0 text-center'>
         in {currencyNameFormatter.of(baseCurrency)}
       </h3>
     </div>
