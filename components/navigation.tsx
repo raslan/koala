@@ -51,13 +51,13 @@ export default function Sidebar() {
       </Tabs>
     );
   return (
-    <div className='p-4 flex flex-col w-64 rounded-md border gap-4 pt-10'>
+    <div className='p-4 flex flex-col w-32 rounded-md border gap-4 pt-10'>
       {pages.map(({ path, name, icon: Icon }) => (
         <>
           <Link
             className={cn(
               buttonVariants({ variant: 'ghost' }),
-              'flex flex-col justify-center gap-3 w-full text-lg p-4 h-full'
+              'flex flex-col justify-center gap-3 w-full p-4 h-full'
             )}
             href={path}
             key={name}

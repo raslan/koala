@@ -7,7 +7,7 @@ export const Heading = ({ children }: { children: string }) => {
   return (
     <div className='flex justify-between items-start'>
       <div className='flex gap-3 items-center'>
-        <AppIcon className='w-10 h-10 lg:w-20 lg:h-20 bg-black dark:bg-transparent rounded-lg' />
+        <AppIcon className='w-10 h-10 lg:w-20 lg:h-20 bg-zinc-950 rounded-lg' />
         <h1 className='mt-1 text-3xl font-extrabold tracking-tight lg:text-6xl mb-2'>
           {children}
         </h1>

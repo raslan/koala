@@ -43,7 +43,11 @@ export default function RootLayout({
                 {children}
               </div>
             </div>
-            <Toaster className='dark:brightness-150' richColors />
+            <Toaster
+              className='dark:brightness-125 dark:contrast-125'
+              richColors
+              closeButton
+            />
           </ThemeProvider>
         </body>
       </html>

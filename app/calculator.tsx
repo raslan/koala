@@ -47,7 +47,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <Heading>Home</Heading>
+      <Heading>Calculator</Heading>
 
       <div className='flex flex-col lg:flex-row py-8 max-w-xl gap-4'>
         <Button

@@ -63,7 +63,7 @@ const Rates = () => {
     [rates, baseCurrency]
   );
   return (
-    <div>
+    <div className='mt-4'>
       <ComboBoxResponsive
         options={currencyOptions}
         selectedOption={baseCurrency}
