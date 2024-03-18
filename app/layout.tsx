@@ -34,6 +34,7 @@ export default function RootLayout({
           socialButtonsBlockButton: '[border-width:2px!important] border-input',
           footerActionLink: 'text-primary',
           formFieldInput: '[border-width:2px!important] border-input',
+          formFieldInput__identifier: 'email',
           modalCloseButton: 'text-primary',
         },
       }}
