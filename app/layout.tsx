@@ -28,7 +28,6 @@ export default function RootLayout({
   return (
     <ClerkProvider
       appearance={{
-        baseTheme: dark,
         elements: {
           socialButtonsBlockButtonText: 'text-primary',
           socialButtonsBlockButton: '[border-width:2px!important] border-input',
