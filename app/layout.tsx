@@ -8,6 +8,7 @@ import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { dark } from '@clerk/themes';
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -25,7 +26,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        elements: {
+          socialButtonsBlockButtonText: 'text-primary',
+          socialButtonsBlockButton: '[border-width:2px!important] border-input',
+          footerActionLink: 'text-primary',
+          formFieldInput: '[border-width:2px!important] border-input',
+          modalCloseButton: 'text-primary',
+        },
+      }}
+    >
       <html className='antialiased' lang='en' suppressHydrationWarning>
         <body
           className={cn(

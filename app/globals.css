@@ -62,20 +62,24 @@ body {
   }
 }
 
+.cl-modalContent {
+  @apply xl:scale-125;
+}
+
 .cl-formButtonPrimary {
   @apply inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
 }
 
 .cl-card,
-.cl-socialButtonsBlockButton,
 .cl-alert,
 .cl-identityPreview,
-.cl-phoneInputBox {
+.cl-phoneInputBox,
+.cl-footer {
   @apply border border-input bg-background;
+  background: hsl(var(--background));
 }
 
 .cl-headerTitle,
-.cl-socialButtonsBlockButtonText,
 .cl-loading,
 .cl-formFieldLabel,
 .cl-formHeaderTitle,
@@ -83,7 +87,7 @@ body {
 .cl-selectButton__countryCode p,
 .cl-selectOption p,
 .cl-selectOption div {
-  @apply dark:text-foreground;
+  @apply text-foreground;
 }
 
 .cl-headerSubtitle,
@@ -101,16 +105,44 @@ body {
   @apply bg-border;
 }
 
+.cl-modalCloseButton {
+  @apply text-primary;
+}
+
 .cl-formFieldInput {
-  @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  @apply flex h-10 w-full rounded-md bg-background px-3 py-2 text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground hover:border-input focus-visible:border-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [border-width:2px!important] border-input;
 }
 
 .cl-footerActionLink {
-  @apply text-accent-foreground underline hover:text-accent-foreground/90;
+  @apply text-primary underline;
+}
+
+.cl-socialButtonsBlockButtonText {
+  @apply text-primary;
+}
+
+.cl-socialButtonsBlockButton {
+  @apply [border-width:2px!important] border-input;
+}
+
+.cl-socialButtonsBlockButton > span > span > img {
+  @apply invert-0 dark:invert;
+}
+
+.cl-footer :not(.cl-footerAction) div {
+  @apply invert dark:invert-0;
+}
+
+.cl-footerActionLink {
+  @apply text-primary;
 }
 
 .cl-otpCodeFieldInput {
   @apply border border-b-input text-foreground;
+}
+
+.cl-formFieldInputShowPasswordButton {
+  @apply dark:invert;
 }
 
 .cl-formResendCodeLink {
@@ -126,5 +158,5 @@ body {
 }
 
 .cl-internal-icon {
-  @apply text-foreground;
+  @apply text-primary-foreground;
 }

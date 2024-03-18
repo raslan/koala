@@ -1,7 +1,6 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { ModeToggle } from './mode-toggle';
-import { Button } from './button';
 import AppIcon from '../icons/app';
+import ClerkBlock from './clerkblock';
 
 export const Heading = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -13,14 +12,7 @@ export const Heading = ({ children }: { children: React.ReactNode }) => {
         </h1>
       </div>
       <div className='relative flex items-center gap-3 right-2 top-2'>
-        <SignedOut>
-          <SignInButton mode='modal'>
-            <Button variant={'default'}>Sign In</Button>
-          </SignInButton>
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+        <ClerkBlock />
         <ModeToggle />
       </div>
     </div>
