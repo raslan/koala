@@ -171,10 +171,44 @@ export const evaluateNaturalExpression = (
         const currencyCode = SymbolCodeMap[match as keyof typeof SymbolCodeMap];
         return currencyCode ? currencyCode : match;
       })
-      .replace(/\(/g, '( ')
-      .replace(/\)/g, ' )')
-      .replace(/\s+/g, ' ')
-      .trim()
+      .replace(/[\(\)]|\s+/g, (match: string) => {
+        switch (match) {
+          case '(':
+            return '( ';
+          case ')':
+            return ' )';
+          default:
+            return ' ';
+        }
+      })
+      .replace(/(?<![a-zA-Z])([kmbtKMBT])(?![a-zA-Z])/g, (match: any) => {
+        switch (match) {
+          case 'k':
+            return ' * 1000';
+          case 'm':
+            return ' * 1000000';
+          case 'b':
+            return ' * 1000000000';
+          case 't':
+            return ' * 1000000000000';
+          default:
+            return match;
+        }
+      })
+      .replace(/\b(thousand|million|billion|trillion)\b/g, (match: any) => {
+        switch (match.toLowerCase()) {
+          case 'thousand':
+            return ' * 1000';
+          case 'million':
+            return ' * 1000000';
+          case 'billion':
+            return ' * 1000000000';
+          case 'trillion':
+            return ' * 1000000000000';
+          default:
+            return match;
+        }
+      })
       .split(' ');
     const tokens = handleSpaces(uniformExpression).map(cleanString);
     const baseCurrencyExchangeRates = convertRatesToDineroFormat(rates);
