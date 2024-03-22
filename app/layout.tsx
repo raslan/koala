@@ -8,6 +8,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import './globals.css';
+import { Suspense } from 'react';
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -50,9 +51,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className='flex w-full h-full pb-32 lg:pb-0'>
-              <Navigation />
-              <div className='w-full px-8 py-24 lg:p-8 overflow-y-auto min-h-screen'>
+            <div className='flex w-full h-full pb-48 lg:pb-0'>
+              <Suspense fallback={null}>
+                <Navigation />
+              </Suspense>
+              <div className='w-full px-8 pt-8 pb-32 overflow-y-auto min-h-screen'>
                 {children}
               </div>
             </div>
