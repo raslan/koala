@@ -160,3 +160,11 @@ body {
 .cl-internal-icon {
   @apply text-primary-foreground;
 }
+
+.rccs__card--unknown > .rccs__card--front {
+  @apply [background:black] border-2 border-primary/40;
+}
+
+.rccs__card--front > .rccs__number {
+  @apply opacity-85;
+}
