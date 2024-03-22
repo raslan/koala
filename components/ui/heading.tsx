@@ -2,7 +2,13 @@ import { ModeToggle } from './mode-toggle';
 import AppIcon from '../icons/app';
 import ClerkBlock from './clerkblock';
 
-export const Heading = ({ children }: { children: React.ReactNode }) => {
+export const Heading = ({
+  children,
+  showThemeSwitcher = true,
+}: {
+  children: React.ReactNode;
+  showThemeSwitcher?: boolean;
+}) => {
   return (
     <div className='flex justify-between items-start'>
       <div className='flex lg:gap-3 items-center'>
@@ -11,10 +17,12 @@ export const Heading = ({ children }: { children: React.ReactNode }) => {
           {children}
         </h1>
       </div>
-      <div className='relative flex items-center gap-3 right-2 top-2'>
-        <ClerkBlock />
-        <ModeToggle />
-      </div>
+      {showThemeSwitcher && (
+        <div className='relative flex items-center gap-3 right-2 top-2'>
+          {/* <ClerkBlock /> */}
+          <ModeToggle />
+        </div>
+      )}
     </div>
   );
 };

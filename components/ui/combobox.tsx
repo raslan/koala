@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
 
 import { useMediaQuery } from 'usehooks-ts';
 import { Button } from '@/components/ui/button';
@@ -47,6 +48,7 @@ export function ComboBoxResponsive({
             className='w-auto justify-start border-foreground border-2'
           >
             {selected ? <>{selected.label}</> : <>+ Set Option</>}
+            <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
         <PopoverContent className='w-auto p-0' align='start'>
@@ -68,6 +70,7 @@ export function ComboBoxResponsive({
           className='w-auto justify-start bg-foreground'
         >
           {selected ? <>{selected.label}</> : <>+ Set Option</>}
+          <ChevronDownIcon />
         </Button>
       </DrawerTrigger>
       <DrawerContent>
