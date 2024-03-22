@@ -1,8 +1,8 @@
 import { Heading } from '@/components/ui/heading';
 import Link from 'next/link';
 
-const ArticleLink = ({ href, title, key }: any) => (
-  <Link className='col-span-1' href={href} key={key}>
+const ArticleLink = ({ href, title }: any) => (
+  <Link className='col-span-1' href={href}>
     <div className='items-center rounded-md border-2 border-muted p-1 hover:border-accent'>
       <div className='space-y-2 rounded-sm bg-[#ecedef] p-2'>
         <div className='space-y-2 rounded-md bg-white p-2 shadow-sm'>
