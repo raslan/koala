@@ -1,6 +1,6 @@
 const PrivacyPolicy = () => {
   return (
-    <div>
+    <div className='prose dark:prose-invert'>
       <h1>Privacy Policy</h1>
       <p>Last updated: March 17, 2024</p>
       <p>
