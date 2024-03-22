@@ -1,8 +1,14 @@
-const CalculatorIcon = () => {
+const CalculatorIcon = ({
+  width = 1,
+  height = 1,
+}: {
+  width?: number;
+  height?: number;
+}) => {
   return (
     <svg
-      width={30}
-      height={30}
+      width={24 / width}
+      height={24 / height}
       viewBox='0 0 24 24'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
