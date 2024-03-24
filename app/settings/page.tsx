@@ -1,7 +1,6 @@
 import { Separator } from '@/components/ui/separator';
 import { AppearanceForm } from './appearance-form';
 import Link from 'next/link';
-import Rates from './[rates]/rates';
 import { Heading } from '@/components/ui/heading';
 
 const page = () => {
@@ -16,14 +15,6 @@ const page = () => {
         </p>
         <Separator className='my-3' />
         <AppearanceForm />
-      </div>
-      <div className='my-6'>
-        <h3 className='text-lg font-medium'>Rates</h3>
-        <p className='text-sm text-muted-foreground'>
-          View the exchange rates for your base currency.
-        </p>
-        <Separator />
-        <Rates />
       </div>
 
       <div className='my-4 text-xs text-primary/80'>
