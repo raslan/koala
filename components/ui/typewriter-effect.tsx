@@ -2,7 +2,7 @@
 
 import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
-import { motion, stagger, useAnimate, useInView } from 'framer-motion';
+import { motion, useAnimate } from 'framer-motion';
 import { useEffect } from 'react';
 
 export const TypewriterEffect = ({
@@ -68,14 +68,5 @@ export const TypewriterEffect = ({
       </motion.div>
     );
   };
-  return (
-    <div
-      className={cn(
-        'text-base sm:text-xl md:text-3xl lg:text-5xl font-bold text-center',
-        className
-      )}
-    >
-      {renderWords()}
-    </div>
-  );
+  return <div className={cn(className)}>{renderWords()}</div>;
 };
