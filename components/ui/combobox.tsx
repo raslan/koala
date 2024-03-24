@@ -103,7 +103,7 @@ function OptionList({
         <CommandGroup>
           {options.map((option: Option) => (
             <CommandItem
-              className='text-lg lg:text-base'
+              className='text-lg md:text-base'
               key={option.value}
               value={option.label}
               onSelect={(value) => {

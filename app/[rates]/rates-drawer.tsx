@@ -17,7 +17,7 @@ const RatesDrawer = () => {
       <DrawerTrigger>
         <Button
           variant='outline'
-          className='border-zinc-700 dark:border-zinc-300 w-full lg:w-auto'
+          className='border-zinc-700 dark:border-zinc-300 w-full md:w-auto'
         >
           View Exchange Rates
         </Button>

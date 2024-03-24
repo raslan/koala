@@ -51,7 +51,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className='flex w-full h-full pb-48 lg:pb-0'>
+            <div className='flex w-full h-full pb-48 md:pb-0'>
               <Suspense fallback={null}>
                 <Navigation />
               </Suspense>

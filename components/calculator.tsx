@@ -55,7 +55,7 @@ const CalculatorBlock = ({
   return (
     <>
       {!hideButtons && (
-        <div className='flex flex-col lg:flex-row py-8 max-w-xl gap-4'>
+        <div className='flex flex-col md:flex-row py-8 max-w-xl gap-4'>
           <Button
             onClick={() => {
               setEntry(
@@ -84,7 +84,7 @@ const CalculatorBlock = ({
           onChange={(e) => setEntry(e.target.value)}
           className={cn(
             'text-2xl text-center font-semibold',
-            small ? 'my-4' : 'mt-4 lg:mt-8 py-8 lg:pt-16 lg:pb-8 lg:text-3xl'
+            small ? 'my-4' : 'mt-4 md:mt-8 py-8 md:pt-16 md:pb-8 md:text-3xl'
           )}
         />
         {!small && (
