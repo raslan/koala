@@ -1,16 +1,79 @@
 import CalculatorBlock from '@/components/calculator';
+import { GuideAlert } from '@/components/ui/guide-alert';
+import BackButton from '@/components/ui/back-button';
 
-<div className="pb-32">
+import AppIcon from '@/components/icons/app';
 
-<article className="prose dark:prose-invert">
-# Welcome to the Calculator guide
+<BackButton previousPage='/guides' />
 
-This guide will teach you how to use the Koalify calculator to great effect!
+<div className="pt-8 pb-32 prose m-auto dark:prose-invert">
 
-I can even put the entire calculator inside the file! Look at this
+# Calculator Guide
 
-</article>
+## How to use the <AppIcon className='bg-zinc-950 rounded-lg w-4 h-4 inline' /> Koala
 
-<CalculatorBlock />
+<AppIcon className='bg-zinc-950 rounded-lg w-4 h-4 inline' /> Koala is like your
+friendly financial translator! Here's what it can understand:
+
+### Numbers and Currency Talk
+
+- **Numbers without a symbol:** These are automatically implied to be your base currency.
+
+<CalculatorBlock hideButtons small preset='1000' />
+
+**Numbers with a symbol:** - Include the currency symbol ($, €) before the
+number (e.g., `$20.50`, `€10`) and <AppIcon className='bg-zinc-950 rounded-lg w-4 h-4 inline' /> Koala will automatically understand it. You can even include a space!
+
+<CalculatorBlock hideButtons small preset='$1000' />
+
+- **Numbers with a currency code:** Numbers with a 3 letter currency code like
+  (`EUR`, `USD`, `EGP`) before **or** after the number. -
+
+  <AppIcon className='bg-zinc-950 rounded-lg w-4 h-4 inline' /> Koala even fixes
+  typos! So `USD100`, `$ 100`, `10usd`, `10 uSd`, `usD100` are all fine.
+
+<CalculatorBlock hideButtons small preset='1000 usd' />
+
+<GuideAlert
+  title='Pro Tip!'
+  description={`You can use parentheses "()" to group things together and ensure the calculator performs the operations in the desired order`}
+/>
+
+- **Large Numbers:** You want to write out `11650000`, but your eyes will hurt,
+  so you can use symbols followed by a space (e.g., `10k` for ten thousand,
+  `10m for ten million`). In this case `11.65m` will represent the number above.
+- **Write them verbally** (e.g., `10 thousand`). In this case `11.65 million` will
+  represent the example number above.
+  - Supported symbols for <AppIcon className='bg-zinc-950 rounded-lg w-4 h-4 inline' /> Koala:
+    - `k`: Thousand (`1,000`)
+    - `m`: Million (`1,000,000`)
+    - `b`: Billion (`1,000,000,000`)
+    - `t`: Trillion (`1,000,000,000,000`)
+
+<CalculatorBlock hideButtons small preset='1k usd + 10 million usd' />
+
+### Supported Operations
+
+<AppIcon className='bg-zinc-950 rounded-lg w-4 h-4 inline' /> Koala can handle all
+the math operations you need for your finances:
+
+- **Basic arithmetic:** `+` (addition), `-` (subtraction), `*` (multiplication), `/` (division)
+- **Percentage calculations:** Use multiplication" (e.g., `15% * $200` for a 15% tip on $200)
+- **Exponents:** `^` (e.g., `2^3` is 2 multiplied by itself 3 times)
+
+**Examples:**
+
+- `$50 + €20` (mixes currencies)
+- `10k gbp + 5m usd` (uses abbreviations)
+- `20 thousand + 5 billion` (written words for large numbers)
+
+Now that we got through all that, try the full power of <AppIcon className='bg-zinc-950 rounded-lg w-4 h-4 inline' /> Koala below!
+
+<GuideAlert
+  title='Pro Tip!'
+  description={`Try pressing on Insert Demo Equation for a good starting point.`}
+/>
+
+<CalculatorBlock small />
 
 </div>
