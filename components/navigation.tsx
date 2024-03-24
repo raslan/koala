@@ -39,8 +39,8 @@ const pages = [
     ),
   },
   {
-    path: '/generators',
-    name: 'Generators',
+    path: '/toolbox',
+    name: 'Toolbox',
     icon: ({ width = 1, height = 1 }: { width?: number; height?: number }) => (
       <svg
         width={24 / width}
