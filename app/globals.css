@@ -6,6 +6,10 @@ body {
 @tailwind components;
 @tailwind utilities;
 
+.prose {
+  @apply max-w-3xl;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
