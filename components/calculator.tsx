@@ -10,15 +10,24 @@ import {
   evaluateNaturalExpression,
   prettyPrint,
 } from '@/lib/financial-tokenizer';
-import { currencyOptions } from '@/lib/utils';
+import { cn, currencyOptions } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import RatesDrawer from '@/app/[rates]/rates-drawer';
 
-const CalculatorBlock = () => {
+const CalculatorBlock = ({
+  hideButtons = false,
+  small = false,
+  preset = '',
+}: {
+  hideButtons?: boolean;
+  small?: boolean;
+  preset?: string;
+}) => {
   const debounce = useDebounce();
   const [result, setResult] = useState('');
   const { rates, baseCurrency, setBaseCurrency } = useCurrency();
-  const [entry, setEntry] = useState('');
+  const [entry, setEntry] = useState(preset);
 
   useEffect(() => {
     if (rates?.USD) {
@@ -45,48 +54,60 @@ const CalculatorBlock = () => {
   }, [entry, baseCurrency, rates, debounce]);
   return (
     <>
-      <div className='flex flex-col lg:flex-row py-8 max-w-xl gap-4'>
-        <Button
-          onClick={() => {
-            setEntry(
-              '(10k * 2 + 10 * (20k egp + eur10 thousand) / 4 - 5) + 10k'
-            );
-            toast.info('Demo equation entered.', {
-              position: 'top-right',
-            });
-          }}
-        >
-          Insert Demo Equation
-        </Button>
-        <ComboBoxResponsive
-          options={currencyOptions}
-          selectedOption={baseCurrency}
-          setSelectedOption={setBaseCurrency}
-        />
-      </div>
+      {!hideButtons && (
+        <div className='flex flex-col lg:flex-row py-8 max-w-xl gap-4'>
+          <Button
+            onClick={() => {
+              setEntry(
+                '(10k * 2 + 10 * (20k egp + eur10 thousand) / 4 - 5) + 10k'
+              );
+              toast.info('Demo equation entered.', {
+                position: 'top-right',
+              });
+            }}
+          >
+            Insert Demo Equation
+          </Button>
+          <ComboBoxResponsive
+            options={currencyOptions}
+            selectedOption={baseCurrency}
+            setSelectedOption={setBaseCurrency}
+          />
+          <RatesDrawer />
+        </div>
+      )}
       <div className='w-full flex flex-col items-center justify-between gap-3'>
         <Textarea
           id='equation-input'
           placeholder='Enter your equation to start calculating...'
           value={entry}
           onChange={(e) => setEntry(e.target.value)}
-          className='text-xl lg:text-3xl mt-4 lg:mt-8 py-8 lg:pt-16 lg:pb-8 text-center font-semibold'
+          className={cn(
+            'text-2xl text-center font-semibold',
+            small ? 'my-4' : 'mt-4 lg:mt-8 py-8 lg:pt-16 lg:pb-8 lg:text-3xl'
+          )}
         />
-        <Button
-          onClick={() => {
-            setEntry('');
-            toast.info('Input cleared.', {
-              position: 'top-right',
-            });
-          }}
-          variant='ghost'
-        >
-          <ClearIcon />
-          Clear Input
-        </Button>
+        {!small && (
+          <Button
+            onClick={() => {
+              setEntry('');
+              toast.info('Input cleared.', {
+                position: 'top-right',
+              });
+            }}
+            variant='ghost'
+          >
+            <ClearIcon />
+            Clear Input
+          </Button>
+        )}
       </div>
       {entry && Boolean(rates?.[baseCurrency]) && result && (
-        <OutputBlock result={result} baseCurrency={baseCurrency} />
+        <OutputBlock
+          result={result}
+          baseCurrency={baseCurrency}
+          small={small}
+        />
       )}
     </>
   );
