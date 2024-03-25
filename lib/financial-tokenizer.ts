@@ -138,11 +138,10 @@ const strToDinero = (
   rates: Record<string, CurrencyRate>
 ): Dinero<number> => {
   // regex to capture optional decimal part
-  const reg: RegExp = /^([A-Z]+)(\d+)(?:\.(\d+))?$/;
+  const reg: RegExp = /^([A-Z]+)(-?\d+)(?:\.(\d+))?$/;
   const matchString = str.match(reg);
   const currency = CurrencyMap[matchString?.[1] as keyof typeof CurrencyMap];
 
-  // Construct the amount string considering the decimal part
   const amountStr = `${matchString?.[2]}${
     matchString?.[3] ? `.${matchString[3]}` : ''
   }`;
@@ -151,6 +150,7 @@ const strToDinero = (
   const currencyRates = getInverseRates(currency.code, baseCurrency, rates);
 
   const tempDineroObj = dineroFromFloat({ amount, currency });
+
   return currency.code === baseCurrency
     ? tempDineroObj
     : convert(
@@ -226,6 +226,11 @@ export const evaluateNaturalExpression = (
         )
         .join(' ')
     )}`;
+    console.log(`🚀 ~ val:`, val);
+    console.log(
+      `🚀 ~ strToDinero(val, baseCurrency, baseCurrencyExchangeRates):`,
+      strToDinero(val, baseCurrency, baseCurrencyExchangeRates)
+    );
     return strToDinero(val, baseCurrency, baseCurrencyExchangeRates);
   } catch (error) {
     throw new Error();
