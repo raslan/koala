@@ -9,7 +9,7 @@ const BackButton = ({ previousPage }: { previousPage: string }) => {
       <Link
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'flex w-full h-full hover:bg-inherit font-bold gap-3'
+          'flex w-full h-full hover:bg-inherit font-bold gap-3 text-lg'
         )}
         href={previousPage}
       >
