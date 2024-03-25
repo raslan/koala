@@ -226,11 +226,6 @@ export const evaluateNaturalExpression = (
         )
         .join(' ')
     )}`;
-    console.log(`🚀 ~ val:`, val);
-    console.log(
-      `🚀 ~ strToDinero(val, baseCurrency, baseCurrencyExchangeRates):`,
-      strToDinero(val, baseCurrency, baseCurrencyExchangeRates)
-    );
     return strToDinero(val, baseCurrency, baseCurrencyExchangeRates);
   } catch (error) {
     throw new Error();
