@@ -1,6 +1,8 @@
 import Navigation from '@/components/navigation';
 import { ThemeProvider } from '@/components/theme-provider';
+import { GlobalSearchBar } from '@/components/ui/global-search';
 import { Toaster } from '@/components/ui/sonner';
+import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Analytics } from '@vercel/analytics/react';
@@ -8,9 +10,6 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import './globals.css';
-import { Suspense } from 'react';
-import { GlobalSearchBar } from '@/components/ui/global-search';
-import { siteConfig } from '@/config/site';
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -102,9 +101,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <div className='flex w-full h-full pb-48 md:pb-0'>
-              <Suspense fallback={null}>
-                <Navigation />
-              </Suspense>
+              <Navigation />
               <div className='w-full px-8 pt-8 pb-32 overflow-y-auto min-h-screen'>
                 {children}
               </div>

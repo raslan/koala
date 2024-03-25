@@ -181,20 +181,23 @@ export const evaluateNaturalExpression = (
             return ' ';
         }
       })
-      .replace(/(?<![a-zA-Z])([kmbtKMBT])(?![a-zA-Z])/g, (match: any) => {
-        switch (match) {
-          case 'k':
-            return ' * 1000';
-          case 'm':
-            return ' * 1000000';
-          case 'b':
-            return ' * 1000000000';
-          case 't':
-            return ' * 1000000000000';
-          default:
-            return match;
+      .replace(
+        /([^a-zA-Z])([kmbtKMBT])(?![a-zA-Z])/g,
+        (match: any, p1: string, p2: string) => {
+          switch (p2) {
+            case 'k':
+              return p1 + ' * 1000';
+            case 'm':
+              return p1 + ' * 1000000';
+            case 'b':
+              return p1 + ' * 1000000000';
+            case 't':
+              return p1 + ' * 1000000000000';
+            default:
+              return match;
+          }
         }
-      })
+      )
       .replace(/\b(thousand|million|billion|trillion)\b/g, (match: any) => {
         switch (match.toLowerCase()) {
           case 'thousand':
@@ -227,7 +230,9 @@ export const evaluateNaturalExpression = (
         .join(' ')
     )}`;
     return strToDinero(val, baseCurrency, baseCurrencyExchangeRates);
-  } catch (error) {
-    throw new Error();
+  } catch (error: any) {
+    throw new Error(
+      `An error occurred while evaluating the expression: ${error?.message}`
+    );
   }
 };
