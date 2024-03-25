@@ -21,7 +21,7 @@ import {
   SunIcon,
 } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
-import { guides } from '@/app/guides/page';
+import { guides } from '@/lib/pages';
 
 export function openGlobalSearchBar() {
   const event = new KeyboardEvent('keydown', {

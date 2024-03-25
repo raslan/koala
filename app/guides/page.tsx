@@ -1,13 +1,7 @@
 import { Heading } from '@/components/ui/heading';
 import RadioCard from '@/components/ui/radio-card';
+import { guides } from '@/lib/pages';
 import Link from 'next/link';
-
-export const guides = [
-  {
-    href: '/guides/calculator',
-    title: 'How to use the Calculator',
-  },
-];
 
 const page = () => {
   return (
