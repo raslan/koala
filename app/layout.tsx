@@ -75,48 +75,56 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      appearance={{
-        elements: {
-          socialButtonsBlockButtonText: 'text-primary',
-          socialButtonsBlockButton: '[border-width:2px!important] border-input',
-          footerActionLink: 'text-primary',
-          formFieldInput: '[border-width:2px!important] border-input',
-          formFieldInput__identifier: 'email',
-          modalCloseButton: 'text-primary',
-        },
-      }}
-    >
-      <html className='antialiased' lang='en' suppressHydrationWarning>
-        <body
-          className={cn(
-            'min-h-screen h-full bg-background font-sans antialiased',
-            fontSans.variable
-          )}
+    // <ClerkProvider
+    //   appearance={{
+    //     elements: {
+    //       socialButtonsBlockButtonText: 'text-primary',
+    //       socialButtonsBlockButton: '[border-width:2px!important] border-input',
+    //       footerActionLink: 'text-primary',
+    //       formFieldInput: '[border-width:2px!important] border-input',
+    //       formFieldInput__identifier: 'email',
+    //       modalCloseButton: 'text-primary',
+    //     },
+    //   }}
+    // >
+    <html className='antialiased' lang='en' suppressHydrationWarning>
+      <head>
+        <meta name='theme-color' content='#000000' />
+        <meta name='apple-mobile-web-app-capable' content='yes' />
+        <meta
+          name='apple-mobile-web-app-status-bar-style'
+          content='black-translucent'
+        />
+      </head>
+      <body
+        className={cn(
+          'min-h-screen h-full bg-background font-sans antialiased',
+          fontSans.variable
+        )}
+      >
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange
         >
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div className='flex w-full h-full pb-48 md:pb-0'>
-              <Navigation />
-              <div className='w-full px-8 pt-8 pb-32 overflow-y-auto min-h-screen'>
-                {children}
-              </div>
+          <div className='flex w-full h-full pb-48 md:pb-0'>
+            <Navigation />
+            <div className='w-full px-8 pt-8 pb-32 overflow-y-auto min-h-screen'>
+              {children}
             </div>
-            <Toaster
-              className='dark:brightness-125 dark:contrast-125'
-              richColors
-              closeButton
-            />
-            <GlobalSearchBar />
-          </ThemeProvider>
-          <Analytics />
-          <SpeedInsights />
-        </body>
-      </html>
-    </ClerkProvider>
+          </div>
+          <Toaster
+            className='dark:brightness-125 dark:contrast-125'
+            richColors
+            closeButton
+          />
+          <GlobalSearchBar />
+        </ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
+      </body>
+    </html>
+    // </ClerkProvider>
   );
 }
