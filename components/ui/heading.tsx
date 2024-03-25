@@ -1,6 +1,6 @@
-import { ModeToggle } from './mode-toggle';
 import AppIcon from '../icons/app';
-import ClerkBlock from './clerkblock';
+import GlobalTriggerButton from './global-trigger';
+import { ModeToggle } from './mode-toggle';
 
 export const Heading = ({
   children,
@@ -17,12 +17,15 @@ export const Heading = ({
           {children}
         </h1>
       </div>
-      {showThemeSwitcher && (
-        <div className='relative flex items-center gap-3 right-2 top-2'>
-          {/* <ClerkBlock /> */}
-          <ModeToggle />
-        </div>
-      )}
+      <div className='relative flex items-center gap-3 right-2 top-2'>
+        <GlobalTriggerButton />
+        {showThemeSwitcher && (
+          <>
+            {/* <ClerkBlock /> */}
+            <ModeToggle />
+          </>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 import { currenciesWithNames, currencyOptions } from '@/lib/utils';
-import { DataTable } from '@/app/[rates]/data-table';
+import { DataTable } from '@/app/(rates)/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import { ComboBoxResponsive } from '@/components/ui/combobox';
 import useCurrency from '@/hooks/useCurrency';

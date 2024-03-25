@@ -8,10 +8,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMediaQuery } from 'usehooks-ts';
 
-const pages = [
+export const pages = [
   {
-    path: '/budget',
-    name: 'Budget',
+    href: '/budget',
+    title: 'Budget',
     icon: ({ width = 1, height = 1 }: { width?: number; height?: number }) => (
       <svg
         width={24 / width}
@@ -39,8 +39,8 @@ const pages = [
     ),
   },
   {
-    path: '/toolbox',
-    name: 'Toolbox',
+    href: '/toolbox',
+    title: 'Toolbox',
     icon: ({ width = 1, height = 1 }: { width?: number; height?: number }) => (
       <svg
         width={24 / width}
@@ -67,8 +67,8 @@ const pages = [
     ),
   },
   {
-    path: '/',
-    name: 'Calculator',
+    href: '/',
+    title: 'Calculator',
     icon: ({ width = 1, height = 1 }: { width?: number; height?: number }) => (
       <svg
         width={30 / width}
@@ -96,8 +96,8 @@ const pages = [
     ),
   },
   {
-    path: '/guides',
-    name: 'Guides',
+    href: '/guides',
+    title: 'Guides',
     icon: ({ width = 1, height = 1 }: { width?: number; height?: number }) => (
       <svg
         width={24 / width}
@@ -116,8 +116,8 @@ const pages = [
     ),
   },
   {
-    path: '/settings',
-    name: 'Settings',
+    href: '/settings',
+    title: 'Settings',
     icon: ({ width = 1, height = 1 }: { width?: number; height?: number }) => (
       <svg
         width={24 / width}
@@ -150,8 +150,8 @@ export default function Sidebar() {
   const defaultOption =
     path === '/'
       ? 'Calculator'
-      : pages.find((page) => page.path !== '/' && path.includes(page.path))
-          ?.name;
+      : pages.find((page) => page.href !== '/' && path.includes(page.href))
+          ?.title;
 
   if (!isDesktop)
     return (
@@ -160,21 +160,21 @@ export default function Sidebar() {
         className='w-full z-50 fixed bottom-0 max-h-40 bg-background'
       >
         <TabsList className='grid grid-cols-5 w-full justify-around items-center bg-transparent h-full'>
-          {pages.map(({ path, name, icon: Icon }) => (
+          {pages.map(({ href, title, icon: Icon }) => (
             <Link
               className={cn(
                 buttonVariants({ variant: 'ghost' }),
                 'flex flex-col w-full text-xs h-full hover:bg-inherit'
               )}
-              href={path}
-              key={name}
+              href={href}
+              key={title}
             >
               <TabsTrigger
                 className='p-2 flex flex-col gap-1 text-xs data-[state=active]:bg-accent'
-                value={name}
+                value={title}
               >
                 <Icon width={2} height={2} />
-                {name}
+                {title}
               </TabsTrigger>
               <Separator className='bg-transparent' />
             </Link>
@@ -185,21 +185,21 @@ export default function Sidebar() {
   return (
     <Tabs orientation='vertical' defaultValue={defaultOption}>
       <TabsList className='flex flex-col h-full bg-transparent scale-75'>
-        {pages.map(({ path, name, icon: Icon }) => (
+        {pages.map(({ href, title, icon: Icon }) => (
           <Link
             className={cn(
               buttonVariants({ variant: 'ghost' }),
               'flex flex-col w-full h-full p-0'
             )}
-            href={path}
-            key={name}
+            href={href}
+            key={title}
           >
             <TabsTrigger
               className='h-full flex flex-col gap-1 text-base data-[state=active]:bg-accent dark:data-[state=active]:bg-accent/60 w-full group text-center'
-              value={name}
+              value={title}
             >
               <Icon />
-              {name}
+              {title}
             </TabsTrigger>
             <Separator className='bg-transparent' />
           </Link>

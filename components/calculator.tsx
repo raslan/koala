@@ -13,7 +13,7 @@ import {
 import { cn, currencyOptions } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import RatesDrawer from '@/app/[rates]/rates-drawer';
+import RatesDrawer from '@/app/(rates)/rates-drawer';
 
 const CalculatorBlock = ({
   hideButtons = false,

@@ -2,7 +2,7 @@ import { Heading } from '@/components/ui/heading';
 import RadioCard from '@/components/ui/radio-card';
 import Link from 'next/link';
 
-const guides = [
+export const guides = [
   {
     href: '/guides/calculator',
     title: 'How to use the Calculator',

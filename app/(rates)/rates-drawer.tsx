@@ -1,4 +1,4 @@
-import Rates from '@/app/[rates]/rates';
+import Rates from '@/app/(rates)/rates';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
