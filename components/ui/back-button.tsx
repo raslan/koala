@@ -5,7 +5,7 @@ import { ArrowLeftIcon } from '@radix-ui/react-icons';
 
 const BackButton = ({ previousPage }: { previousPage: string }) => {
   return (
-    <div className='inline-flex items-center justify-center font-bold'>
+    <div className='inline-flex items-center justify-center font-bold -ml-4'>
       <Link
         className={cn(
           buttonVariants({ variant: 'ghost' }),

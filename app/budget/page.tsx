@@ -1,6 +1,5 @@
 'use client';
 import { Heading } from '@/components/ui/heading';
-import { Label } from '@/components/ui/label';
 import Cards from 'react-credit-cards-2';
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
 
@@ -14,11 +13,12 @@ const BudgetPage = () => {
         </p>
         <div>
           <Cards
-            number='••••••••••••5211'
+            issuer='elo'
+            number='••••••••••••••••'
             preview={true}
-            expiry='05/27'
+            expiry=''
             cvc='000'
-            name='Credit Card'
+            name='Credit Card 1'
           />
         </div>
       </div>
