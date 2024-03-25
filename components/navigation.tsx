@@ -184,7 +184,7 @@ export default function Sidebar() {
     );
   return (
     <Tabs orientation='vertical' defaultValue={defaultOption}>
-      <TabsList className='flex flex-col h-full bg-transparent pl-4'>
+      <TabsList className='flex flex-col h-full bg-transparent scale-75'>
         {pages.map(({ path, name, icon: Icon }) => (
           <Link
             className={cn(
