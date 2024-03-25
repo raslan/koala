@@ -89,7 +89,7 @@ export default function RootLayout({
     // >
     <html className='antialiased' lang='en' suppressHydrationWarning>
       <head>
-        <meta name='theme-color' content='#000000' />
+        <meta name='theme-color' content='#09090b' />
         <meta name='apple-mobile-web-app-capable' content='yes' />
         <meta
           name='apple-mobile-web-app-status-bar-style'
