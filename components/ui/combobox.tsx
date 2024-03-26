@@ -108,8 +108,9 @@ function OptionList({
               value={option.label}
               onSelect={(value) => {
                 setSelectedOption(
-                  options?.find?.((opt) => opt?.label.toLowerCase() === value)
-                    ?.value as string
+                  options?.find?.(
+                    (opt) => opt?.label.toLowerCase() === value?.toLowerCase()
+                  )?.value as string
                 );
                 setOpen(false);
               }}
