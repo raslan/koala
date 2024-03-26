@@ -92,7 +92,7 @@ const CalculatorBlock = ({
           )}
         />
         {!small && (
-          <div className='flex max-w-sm md:-ml-28'>
+          <div className='flex max-w-sm'>
             <Button
               onClick={() => {
                 setEntry(result);

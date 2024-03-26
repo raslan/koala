@@ -104,7 +104,7 @@ export default function RootLayout({
         >
           <div className='flex w-full h-full pb-48 md:pb-0'>
             <Navigation path={path} isMobile={isMobile} />
-            <div className='w-full px-8 pt-8 pb-32 overflow-y-auto min-h-screen'>
+            <div className='w-full px-8 md:pl-4 md:pr-8 pt-8 pb-32 overflow-y-auto min-h-screen'>
               {children}
             </div>
           </div>
