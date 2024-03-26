@@ -92,23 +92,13 @@ const CalculatorBlock = ({
           )}
         />
         {!small && (
-          <div className='flex max-w-sm'>
-            <Button
-              onClick={() => {
-                setEntry(entry + ` + ${result}`);
-              }}
-              variant='ghost'
-              className='font-bold'
-            >
-              <PlusCircledIcon className='mr-1' />
-              Add output back
-            </Button>
+          <div className='flex max-w-sm md:-ml-28'>
             <Button
               onClick={() => {
                 setEntry(result);
               }}
               variant='ghost'
-              className='font-bold'
+              className='font-bold hidden md:inline-flex'
             >
               <ArrowUpIcon className='mr-1' />
               Use just output
@@ -125,6 +115,16 @@ const CalculatorBlock = ({
             >
               <EraserIcon className='mr-1' />
               Clear
+            </Button>
+            <Button
+              onClick={() => {
+                setEntry(entry + ` + ${result}`);
+              }}
+              variant='ghost'
+              className='font-bold hidden md:inline-flex'
+            >
+              <PlusCircledIcon className='mr-1' />
+              Add output back
             </Button>
           </div>
         )}
