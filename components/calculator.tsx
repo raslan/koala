@@ -1,11 +1,9 @@
 'use client';
-import ClearIcon from '@/components/icons/clear';
 import { Button } from '@/components/ui/button';
 import { ComboBoxResponsive } from '@/components/ui/combobox';
 import { OutputBlock } from '@/components/ui/output-block';
 import { Textarea } from '@/components/ui/textarea';
 import useCurrency from '@/hooks/useCurrency';
-import { useDebounce } from '@/hooks/useDebounce';
 import {
   evaluateNaturalExpression,
   prettyPrint,
@@ -14,6 +12,12 @@ import { cn, currencyOptions } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import RatesDrawer from '@/app/(rates)/rates-drawer';
+import {
+  ArrowUpIcon,
+  EraserIcon,
+  PlusCircledIcon,
+} from '@radix-ui/react-icons';
+import { useSettingsStore } from '@/store/settings';
 
 const CalculatorBlock = ({
   hideButtons = false,
@@ -24,38 +28,38 @@ const CalculatorBlock = ({
   small?: boolean;
   preset?: string;
 }) => {
-  const debounce = useDebounce();
   const [result, setResult] = useState('');
   const { rates, baseCurrency, setBaseCurrency } = useCurrency();
   const [entry, setEntry] = useState(preset);
-
+  const { notation } = useSettingsStore();
   useEffect(() => {
     if (rates?.USD) {
-      debounce(() => {
-        if (entry && rates?.[baseCurrency]) {
-          try {
-            setResult(
-              prettyPrint(
-                evaluateNaturalExpression(
-                  entry,
-                  baseCurrency,
-                  rates[baseCurrency]
-                )
-              )
-            );
-          } catch (error) {
-            setResult('...');
-          }
-        } else {
-          setResult('');
+      if (entry && rates?.[baseCurrency]) {
+        try {
+          setResult(
+            prettyPrint(
+              evaluateNaturalExpression(
+                entry?.toLowerCase(),
+                baseCurrency,
+                rates[baseCurrency]
+              ),
+              {
+                notation,
+              }
+            )
+          );
+        } catch (error) {
+          setResult('...');
         }
-      }, 150);
+      } else {
+        setResult('');
+      }
     }
-  }, [entry, baseCurrency, rates, debounce]);
+  }, [entry, baseCurrency, rates, notation]);
   return (
     <>
       {!hideButtons && (
-        <div className='flex flex-col md:flex-row py-8 max-w-xl gap-4'>
+        <div className='flex flex-col md:flex-row py-2 max-w-xl gap-2 lg:gap-2.5 mt-2'>
           <Button
             onClick={() => {
               setEntry(
@@ -88,18 +92,41 @@ const CalculatorBlock = ({
           )}
         />
         {!small && (
-          <Button
-            onClick={() => {
-              setEntry('');
-              toast.info('Input cleared.', {
-                position: 'top-right',
-              });
-            }}
-            variant='ghost'
-          >
-            <ClearIcon />
-            Clear Input
-          </Button>
+          <div className='flex max-w-sm'>
+            <Button
+              onClick={() => {
+                setEntry(entry + ` + ${result}`);
+              }}
+              variant='ghost'
+              className='font-bold'
+            >
+              <PlusCircledIcon className='mr-1' />
+              Add output back
+            </Button>
+            <Button
+              onClick={() => {
+                setEntry(result);
+              }}
+              variant='ghost'
+              className='font-bold'
+            >
+              <ArrowUpIcon className='mr-1' />
+              Use just output
+            </Button>
+            <Button
+              onClick={() => {
+                setEntry('');
+                toast.info('Input cleared.', {
+                  position: 'top-right',
+                });
+              }}
+              variant='ghost'
+              className='font-bold'
+            >
+              <EraserIcon className='mr-1' />
+              Clear
+            </Button>
+          </div>
         )}
       </div>
       {entry && Boolean(rates?.[baseCurrency]) && result && (

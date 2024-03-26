@@ -6,7 +6,7 @@ import {
   DrawerContent,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { ArrowUpIcon } from '@radix-ui/react-icons';
+import { ArrowDownIcon } from '@radix-ui/react-icons';
 
 const RatesDrawer = () => {
   return (
@@ -21,9 +21,9 @@ const RatesDrawer = () => {
       </DrawerTrigger>
       <DrawerContent>
         <DrawerClose>
-          <Button variant='ghost'>
-            <ArrowUpIcon />
-            Back
+          <Button className='w-full text-center' variant='ghost'>
+            <ArrowDownIcon className='mr-1' />
+            Click to Collapse
           </Button>
         </DrawerClose>
         <div className='max-h-[70vh] px-4 overflow-scroll'>

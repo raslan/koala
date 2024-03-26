@@ -1,5 +1,3 @@
-'use client';
-
 import CalculatorBlock from '@/components/calculator';
 import { Heading } from '@/components/ui/heading';
 

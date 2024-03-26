@@ -2,6 +2,7 @@ import { Separator } from '@/components/ui/separator';
 import { AppearanceForm } from './appearance-form';
 import Link from 'next/link';
 import { Heading } from '@/components/ui/heading';
+import CalculatorSettingsForm from './calculator-settings';
 
 const page = () => {
   return (
@@ -10,9 +11,10 @@ const page = () => {
       <div>
         <h3 className='text-lg font-medium my-3'>Appearance</h3>
         <p className='text-sm text-muted-foreground my-3'>
-          Customize the appearance of the app. Automatically switch between day
-          and night themes.
+          Customize the appearance of the app.
         </p>
+        <Separator className='my-3' />
+        <CalculatorSettingsForm />
         <Separator className='my-3' />
         <AppearanceForm />
       </div>

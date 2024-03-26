@@ -17,7 +17,7 @@ export const useSettingsStore = create<SettingsState & SettingsActions>()(
   devtools(
     persist(
       immer((set) => ({
-        notation: 'compact',
+        notation: 'standard',
         updateState: (updater: (state: Draft<SettingsState>) => void) =>
           set((state) => updater(state)),
       })),
