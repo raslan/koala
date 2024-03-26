@@ -1,16 +1,11 @@
+import { SettingsState } from '@/store/settings';
 import * as Currencies from '@dinero.js/currencies';
 import { Dinero, Rates, convert, dinero, toDecimal } from 'dinero.js';
 import { evaluate } from 'mathjs';
 
-const transformer = ({ value, currency }: any) => {
-  return `${Number(value).toLocaleString('en-US', {
-    style: 'currency',
-    currency: currency.code,
-  })}`;
-};
-
-export const isDinero = (object: Record<string, unknown>) => {
-  return object && typeof object.toJSON === 'function';
+type CurrencyRate = {
+  amount: number;
+  scale: number;
 };
 
 const CurrencyMap: Record<string, any> = {};
@@ -18,47 +13,39 @@ for (const key in Currencies) {
   CurrencyMap[key] = Currencies[key as keyof typeof Currencies];
 }
 
-type CurrencyRate = {
-  amount: number;
-  scale: number;
+const SymbolCodeMap = {
+  $: 'USD',
+  '€': 'EUR',
+  '£': 'GBP',
 };
 
-export const convertRatesToDineroFormat = (
-  rates: any
-): Record<string, CurrencyRate> => {
-  const usableRates = rates;
-  const dineroRates: Record<string, CurrencyRate> = {};
-  for (const currencyCode in usableRates) {
-    const rate = usableRates[currencyCode as keyof typeof usableRates];
-    const currency = CurrencyMap[currencyCode.toUpperCase()];
-    if (currency) {
-      const scale = currency.exponent || 2; // Default to  2 if exponent is not defined
-      const integerRate = Math.round(rate * Math.pow(10, scale + 4));
-      dineroRates[currencyCode] = { amount: integerRate, scale: scale + 4 };
-    }
-  }
-  return dineroRates;
-};
-
-const getInverseRates = (
-  targetCurrency: string,
-  baseCurrency: string = 'USD',
-  rates: Record<string, CurrencyRate>
-): Record<string, CurrencyRate> | undefined => {
-  const usableRates = rates;
-  const targetRate = usableRates[targetCurrency as keyof typeof usableRates];
-  if (!targetRate) {
-    throw new Error(
-      `Unable to find rate for target currency: ${targetCurrency}`
-    );
-  }
-
-  const scale = targetRate.scale;
-
-  // Return the inverse rate as a Dinero-compatible object with base currency as the key
-  return {
-    [baseCurrency]: { amount: targetRate.amount, scale },
+const createTransformer =
+  (formatOptions?: { notation?: SettingsState['notation'] }) =>
+  ({
+    value,
+    currency,
+  }: {
+    value: string;
+    currency: {
+      code: string;
+    };
+  }) => {
+    return `${Number(value).toLocaleString('en-US', {
+      style: 'currency',
+      currency: currency.code,
+      ...(formatOptions?.notation && {
+        notation: formatOptions.notation,
+      }),
+    })}`;
   };
+
+const isNaN = (input: unknown): boolean => {
+  const toNum = Number(input);
+  return Number.isNaN(toNum);
+};
+
+const isDinero = (object: Record<string, unknown>) => {
+  return object && typeof object.toJSON === 'function';
 };
 
 const dineroFromFloat = ({
@@ -66,20 +53,12 @@ const dineroFromFloat = ({
   currency,
 }: {
   amount: number;
-  currency: any;
+  currency: Currencies.Currency<any>;
 }) => {
   const factor = currency.base ** currency.exponent;
   const amount = Math.round(float * factor);
 
   return dinero({ amount, currency });
-};
-
-export const prettyPrint = (el: Dinero<number>) =>
-  toDecimal(el as Dinero<number>, transformer);
-
-const isNaN = (input: any): boolean => {
-  const toNum = +input;
-  return Number.isNaN(toNum);
 };
 
 const cleanString = (inputString: string): string => {
@@ -126,12 +105,6 @@ const handleSpaces = (inputArray: string[]): string[] => {
   return outputArray;
 };
 
-const SymbolCodeMap = {
-  $: 'USD',
-  '€': 'EUR',
-  '£': 'GBP',
-};
-
 const strToDinero = (
   str: string,
   baseCurrency: string = 'USD',
@@ -159,6 +132,51 @@ const strToDinero = (
         currencyRates as Rates<number>
       );
 };
+
+export const getInverseRates = (
+  targetCurrency: string,
+  baseCurrency: string = 'USD',
+  rates: Record<string, CurrencyRate>
+): Record<string, CurrencyRate> | undefined => {
+  const usableRates = rates;
+  const targetRate = usableRates[targetCurrency as keyof typeof usableRates];
+  if (!targetRate) {
+    throw new Error(
+      `Unable to find rate for target currency: ${targetCurrency}`
+    );
+  }
+
+  const scale = targetRate.scale;
+
+  // Return the inverse rate as a Dinero-compatible object with base currency as the key
+  return {
+    [baseCurrency]: { amount: targetRate.amount, scale },
+  };
+};
+
+export const convertRatesToDineroFormat = (
+  rates: any
+): Record<string, CurrencyRate> => {
+  const usableRates = rates;
+  const dineroRates: Record<string, CurrencyRate> = {};
+  for (const currencyCode in usableRates) {
+    const rate = usableRates[currencyCode as keyof typeof usableRates];
+    const currency = CurrencyMap[currencyCode.toUpperCase()];
+    if (currency) {
+      const scale = currency.exponent || 2; // Default to  2 if exponent is not defined
+      const integerRate = Math.round(rate * Math.pow(10, scale + 4));
+      dineroRates[currencyCode] = { amount: integerRate, scale: scale + 4 };
+    }
+  }
+  return dineroRates;
+};
+
+export const prettyPrint = (
+  el: Dinero<number>,
+  formatOptions?: {
+    notation?: SettingsState['notation'];
+  }
+) => toDecimal(el as Dinero<number>, createTransformer(formatOptions));
 
 export const evaluateNaturalExpression = (
   input: string,

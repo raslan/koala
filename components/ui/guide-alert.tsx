@@ -10,7 +10,7 @@ export function GuideAlert({
 }) {
   return (
     <Alert>
-      <AppIcon className='h-4 w-4' />
+      <AppIcon className='h-6 w-6 bg-zinc-950 rounded-lg' />
       <AlertTitle className='font-bold'>{title}</AlertTitle>
       <AlertDescription>{description}</AlertDescription>
     </Alert>

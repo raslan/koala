@@ -1,14 +1,16 @@
-import Navigation from '@/components/navigation';
+import Navigation from '@/app/navigation';
 import { ThemeProvider } from '@/components/theme-provider';
 import { GlobalSearchBar } from '@/components/ui/global-search';
 import { Toaster } from '@/components/ui/sonner';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
-import { ClerkProvider } from '@clerk/nextjs';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
+import { headers } from 'next/headers';
+import { getSelectorsByUserAgent } from 'react-device-detect';
+
 import './globals.css';
 
 export const fontSans = FontSans({
@@ -74,19 +76,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isMobile } = getSelectorsByUserAgent(
+    headers().get('user-agent') ?? ''
+  );
+  const path = new URL(headers()?.get('x-url') as string).pathname;
   return (
-    // <ClerkProvider
-    //   appearance={{
-    //     elements: {
-    //       socialButtonsBlockButtonText: 'text-primary',
-    //       socialButtonsBlockButton: '[border-width:2px!important] border-input',
-    //       footerActionLink: 'text-primary',
-    //       formFieldInput: '[border-width:2px!important] border-input',
-    //       formFieldInput__identifier: 'email',
-    //       modalCloseButton: 'text-primary',
-    //     },
-    //   }}
-    // >
     <html className='antialiased' lang='en' suppressHydrationWarning>
       <head>
         <meta name='theme-color' content='#09090b' />
@@ -109,7 +103,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className='flex w-full h-full pb-48 md:pb-0'>
-            <Navigation />
+            <Navigation path={path} isMobile={isMobile} />
             <div className='w-full px-8 pt-8 pb-32 overflow-y-auto min-h-screen'>
               {children}
             </div>
@@ -125,6 +119,5 @@ export default function RootLayout({
         <SpeedInsights />
       </body>
     </html>
-    // </ClerkProvider>
   );
 }

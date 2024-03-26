@@ -15,20 +15,24 @@ can understand:
 
 ### Numbers and Currency Talk
 
+<GuideAlert
+  title='Pro Tip!'
+  description={`All these examples are fully interactive! Try it out below.`}
+/>
+
 - **Numbers without a symbol:** These are automatically implied to be your base currency.
 
 <CalculatorBlock hideButtons small preset='1000' />
 
-**Numbers with a symbol:** - Include the currency symbol ($, €) before the
-number (e.g., `$20.50`, `€10`) and <AppIcon name docs /> will automatically understand it. You can even include a space!
+- **Numbers with a symbol:** Include the currency symbol ($, €) before the
+  number (e.g., `$20.50`, `€10`) and <AppIcon name docs /> will automatically understand it. You can even include a space!
 
 <CalculatorBlock hideButtons small preset='$1000' />
 
 - **Numbers with a currency code:** Numbers with a 3 letter currency code like
-  (`EUR`, `USD`, `EGP`) before **or** after the number. -
+  (`EUR`, `USD`, `EGP`) before **or** after the number.
 
-  <AppIcon name docs /> even fixes typos! So `USD100`, `$ 100`, `10usd`, `10 uSd`,
-  `usD100` are all fine.
+- also <AppIcon name docs /> even fixes typos and ignores spaces! So `USD100`, `$ 100`, `100usd`, `100 uSd`, `usD100` are all the same.
 
 <CalculatorBlock hideButtons small preset='1000 usd' />
 
@@ -47,8 +51,13 @@ number (e.g., `$20.50`, `€10`) and <AppIcon name docs /> will automatically un
     - `m`: Million (`1,000,000`)
     - `b`: Billion (`1,000,000,000`)
     - `t`: Trillion (`1,000,000,000,000`)
+- **Use commas** (e.g., `10,000`). In this case `11,650,000 million` will represent the example number above.
 
-<CalculatorBlock hideButtons small preset='1k usd + 10 million usd' />
+<CalculatorBlock
+  hideButtons
+  small
+  preset='USD1k + 10 million usd + $11,650,000'
+/>
 
 ### Supported Operations
 

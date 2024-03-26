@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { persist, createJSONStorage, devtools } from 'zustand/middleware';
+import { Draft } from 'immer';
 
 export type Rates = Record<string, Record<string, number>>;
 
@@ -12,6 +13,7 @@ export type CurrenciesState = {
 export type CurrenciesActions = {
   addCurrency: (currencyCode: string, rates: Record<string, number>) => void;
   setBaseCurrency: (currencyCode: string) => void;
+  updateState: (updater: (state: Draft<CurrenciesState>) => void) => void;
 };
 
 export const useCurrenciesStore = create<CurrenciesState & CurrenciesActions>()(
@@ -28,6 +30,8 @@ export const useCurrenciesStore = create<CurrenciesState & CurrenciesActions>()(
           set((state) => {
             state.rates[currencyCode] = newRates;
           }),
+        updateState: (updater: (state: Draft<CurrenciesState>) => void) =>
+          set((state) => updater(state)),
       })),
       {
         name: 'currencies-storage',

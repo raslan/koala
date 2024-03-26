@@ -83,7 +83,7 @@ const CalculatorBlock = ({
           value={entry}
           onChange={(e) => setEntry(e.target.value)}
           className={cn(
-            'text-2xl text-center font-semibold',
+            'text-2xl text-center font-semibold border-primary/20 border-2',
             small ? 'my-4' : 'mt-4 md:mt-8 py-8 md:pt-16 md:pb-8 md:text-3xl'
           )}
         />

@@ -12,7 +12,7 @@ import {
   CommandSeparator,
 } from '@/components/ui/command';
 
-import { pages } from '../navigation';
+import { pages } from '../../app/navigation';
 import { useRouter } from 'next/navigation';
 import {
   LaptopIcon,

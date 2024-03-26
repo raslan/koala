@@ -1,12 +1,8 @@
-'use client';
-
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useMediaQuery } from 'usehooks-ts';
 
 export const pages = [
   {
@@ -143,17 +139,20 @@ export const pages = [
   },
 ];
 
-export default function Sidebar() {
-  const isDesktop = useMediaQuery('(min-width: 768px)');
-  const path = usePathname();
-
+export default function Navigation({
+  path,
+  isMobile,
+}: {
+  path: string;
+  isMobile: boolean;
+}) {
   const defaultOption =
     path === '/'
       ? 'Calculator'
       : pages.find((page) => page.href !== '/' && path.includes(page.href))
           ?.title;
 
-  if (!isDesktop)
+  if (isMobile)
     return (
       <Tabs
         defaultValue={defaultOption}
