@@ -6,7 +6,7 @@ import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import { headers } from 'next/headers';
 import { getSelectorsByUserAgent } from 'react-device-detect';
@@ -70,6 +70,19 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   manifest: `${siteConfig.url}/site.webmanifest`,
+  applicationName: siteConfig.name,
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: siteConfig.name,
+    // startUpImage: [],
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+export const viewport: Viewport = {
+  themeColor: '#09090b',
 };
 
 export default function RootLayout({
@@ -82,15 +95,8 @@ export default function RootLayout({
   );
   const path = new URL(headers()?.get('x-url') as string).pathname;
   return (
-    <html className='antialiased' lang='en' suppressHydrationWarning>
-      <head>
-        <meta name='theme-color' content='#09090b' />
-        <meta name='apple-mobile-web-app-capable' content='yes' />
-        <meta
-          name='apple-mobile-web-app-status-bar-style'
-          content='black-translucent'
-        />
-      </head>
+    <html className='antialiased' lang='en' suppressHydrationWarning dir='ltr'>
+      <head />
       <body
         className={cn(
           'min-h-screen h-full bg-background font-sans antialiased',
