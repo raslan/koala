@@ -15,6 +15,7 @@ import {
 import { pages } from '../../app/navigation';
 import { useRouter } from 'next/navigation';
 import {
+  Half2Icon,
   LaptopIcon,
   MoonIcon,
   RocketIcon,
@@ -22,6 +23,7 @@ import {
 } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
 import { guides } from '@/lib/pages';
+import { extendedThemes } from '@/lib/theme';
 
 export function openGlobalSearchBar() {
   const event = new KeyboardEvent('keydown', {
@@ -108,6 +110,15 @@ export function GlobalSearchBar() {
               <MoonIcon className='mr-2 h-4 w-4' />
               Dark
             </CommandItem>
+            {extendedThemes.map(({ theme, name }) => (
+              <CommandItem
+                key={theme}
+                onSelect={() => runCommand(() => setTheme(theme))}
+              >
+                <Half2Icon className='mr-2 h-4 w-4' />
+                {name}
+              </CommandItem>
+            ))}
             <CommandItem onSelect={() => runCommand(() => setTheme('system'))}>
               <LaptopIcon className='mr-2 h-4 w-4' />
               System
