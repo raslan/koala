@@ -2,12 +2,13 @@ import type { Config } from 'tailwindcss';
 import { fontFamily } from 'tailwindcss/defaultTheme';
 
 const config = {
-  darkMode: ['class'],
+  darkMode: ['variant', ['{ &:not(.light *) }', '&:is(.dark *)']],
   content: [
     './pages/**/*.{ts,tsx,mdx}',
     './components/**/*.{ts,tsx,mdx}',
     './app/**/*.{ts,tsx,mdx}',
     './src/**/*.{ts,tsx,mdx}',
+    './lib/**/*.{ts,tsx,mdx}',
   ],
   prefix: '',
   theme: {

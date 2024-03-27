@@ -156,9 +156,9 @@ export default function Navigation({
     return (
       <Tabs
         defaultValue={defaultOption}
-        className='w-full z-50 fixed bottom-0 max-h-40 bg-background'
+        className='fixed bottom-0 z-50 w-full max-h-40 bg-background'
       >
-        <TabsList className='grid grid-cols-5 w-full justify-around items-center bg-transparent h-full'>
+        <TabsList className='grid items-center justify-around w-full h-full grid-cols-5 bg-transparent'>
           {pages.map(({ href, title, icon: Icon }) => (
             <Link
               className={cn(
@@ -169,7 +169,7 @@ export default function Navigation({
               key={title}
             >
               <TabsTrigger
-                className='p-2 flex flex-col gap-1 text-xs data-[state=active]:bg-accent'
+                className='p-2 flex flex-col gap-1 text-xs text-primary data-[state=active]:bg-primary/80 data-[state=active]:text-primary-foreground dark:data-[state=active]:text-primary dark:data-[state=active]:bg-accent/80'
                 value={title}
               >
                 <Icon width={2} height={2} />
@@ -183,7 +183,7 @@ export default function Navigation({
     );
   return (
     <Tabs orientation='vertical' defaultValue={defaultOption}>
-      <TabsList className='flex flex-col h-full bg-transparent scale-75'>
+      <TabsList className='flex flex-col h-full scale-75 bg-transparent'>
         {pages.map(({ href, title, icon: Icon }) => (
           <Link
             className={cn(
@@ -194,7 +194,7 @@ export default function Navigation({
             key={title}
           >
             <TabsTrigger
-              className='h-full flex flex-col gap-1 text-base data-[state=active]:bg-accent dark:data-[state=active]:bg-accent/60 w-full group text-center'
+              className='h-full flex flex-col gap-1 text-primary text-base data-[state=active]:bg-primary/80 data-[state=active]:text-primary-foreground dark:data-[state=active]:text-primary dark:data-[state=active]:bg-accent/80 w-full group text-center'
               value={title}
             >
               <Icon />

@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { themes } from '@/lib/theme';
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -24,9 +25,14 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
-        {['light', 'dark', 'system'].map((theme) => (
-          <DropdownMenuItem key={theme} onClick={() => setTheme(theme)}>
-            {`${theme[0].toUpperCase()}${theme.substring(1)}`}
+        {themes.map(({ theme, name }) => (
+          <DropdownMenuItem
+            key={theme}
+            onClick={() => {
+              setTheme(theme);
+            }}
+          >
+            {`${name}`}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

@@ -12,6 +12,7 @@ import { headers } from 'next/headers';
 import { getSelectorsByUserAgent } from 'react-device-detect';
 
 import './globals.css';
+import { themes } from '@/lib/theme';
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -101,6 +102,7 @@ export default function RootLayout({
           defaultTheme='system'
           enableSystem
           disableTransitionOnChange
+          themes={themes.map((theme) => theme.theme)}
         >
           <div className='flex w-full h-full pb-48 md:pb-0'>
             <Navigation path={path} isMobile={isMobile} />
@@ -108,11 +110,7 @@ export default function RootLayout({
               {children}
             </div>
           </div>
-          <Toaster
-            className='dark:brightness-125 dark:contrast-125'
-            richColors
-            closeButton
-          />
+          <Toaster richColors closeButton />
           <GlobalSearchBar />
         </ThemeProvider>
         <Analytics />

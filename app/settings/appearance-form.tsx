@@ -18,11 +18,18 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from 'sonner';
 import { useTheme } from 'next-themes';
 import RadioCard from '@/components/ui/radio-card';
+import { themes } from '@/lib/theme';
 
 const appearanceFormSchema = z.object({
-  theme: z.enum(['light', 'dark'], {
-    required_error: 'Please select a theme.',
-  }),
+  theme: z.enum(
+    [...themes.map((theme) => theme.theme)] as unknown as readonly [
+      string,
+      ...string[]
+    ],
+    {
+      required_error: 'Please select a theme.',
+    }
+  ),
 });
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
@@ -60,24 +67,27 @@ export function AppearanceForm() {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className='grid max-w-md grid-cols-2 gap-8 pt-2'
+                className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 pt-2'
               >
-                <FormItem>
-                  <FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
-                    <FormControl>
-                      <RadioGroupItem value='light' className='sr-only' />
-                    </FormControl>
-                    <RadioCard>Light</RadioCard>
-                  </FormLabel>
-                </FormItem>
-                <FormItem>
-                  <FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
-                    <FormControl>
-                      <RadioGroupItem value='dark' className='sr-only' />
-                    </FormControl>
-                    <RadioCard dark>Dark</RadioCard>
-                  </FormLabel>
-                </FormItem>
+                {themes.map((theme) => (
+                  <FormItem key={theme.name}>
+                    <FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
+                      <FormControl>
+                        <RadioGroupItem
+                          value={theme.theme}
+                          className='sr-only'
+                        />
+                      </FormControl>
+                      <RadioCard
+                        mainBg={theme.mainBg}
+                        secondaryBg={theme.secondaryBg}
+                        primaryBg={theme.primaryBg}
+                      >
+                        {theme.name}
+                      </RadioCard>
+                    </FormLabel>
+                  </FormItem>
+                ))}
               </RadioGroup>
             </FormItem>
           )}
