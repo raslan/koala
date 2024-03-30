@@ -82,7 +82,7 @@ const CalculatorBlock = ({
           <div className='flex max-w-sm'>
             <Button
               onClick={() => {
-                isDinero(result) &&
+                result &&
                   setEntry(
                     `${prettyPrint(result as Dinero<number>, {
                       currencyDisplay: 'code',
@@ -110,7 +110,7 @@ const CalculatorBlock = ({
             </Button>
             <Button
               onClick={() => {
-                isDinero(result) && setEntry(
+                result && setEntry(
                   entry +
                     ` + ${prettyPrint(result as Dinero<number>, { currencyDisplay: 'code' })}`
                 );
@@ -126,7 +126,7 @@ const CalculatorBlock = ({
       </div>
       {entry && Boolean(rates?.[baseCurrency]) && (
         <OutputBlock
-          result={isDinero(result) ? prettyPrint(result as Dinero<number>, { notation }) : '...'}
+          result={result ? prettyPrint(result as Dinero<number>, { notation }) : '...'}
           baseCurrency={baseCurrency}
           small={small}
         />
