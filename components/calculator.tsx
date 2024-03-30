@@ -5,7 +5,7 @@ import { ComboBoxResponsive } from '@/components/ui/combobox';
 import { OutputBlock } from '@/components/ui/output-block';
 import { Textarea } from '@/components/ui/textarea';
 import useCurrency from '@/hooks/useCurrency';
-import { prettyPrint } from '@/lib/financial-tokenizer';
+import { prettyPrint, isDinero } from '@/lib/financial-tokenizer';
 import { cn, currencyOptions } from '@/lib/utils';
 import { useSettingsStore } from '@/store/settings';
 import { Dinero } from 'dinero.js';
@@ -82,7 +82,12 @@ const CalculatorBlock = ({
           <div className='flex max-w-sm'>
             <Button
               onClick={() => {
-                setEntry(`${prettyPrint(result, {currencyDisplay: 'code'})}`);
+                isDinero(result) &&
+                  setEntry(
+                    `${prettyPrint(result as Dinero<number>, {
+                      currencyDisplay: 'code',
+                    })}`
+                  );
               }}
               variant='ghost'
               className='font-bold hidden md:inline-flex'
@@ -105,7 +110,10 @@ const CalculatorBlock = ({
             </Button>
             <Button
               onClick={() => {
-                setEntry(entry + ` + ${prettyPrint(result, {currencyDisplay: 'code'})}`);
+                isDinero(result) && setEntry(
+                  entry +
+                    ` + ${prettyPrint(result as Dinero<number>, { currencyDisplay: 'code' })}`
+                );
               }}
               variant='ghost'
               className='font-bold hidden md:inline-flex'
@@ -118,7 +126,7 @@ const CalculatorBlock = ({
       </div>
       {entry && Boolean(rates?.[baseCurrency]) && (
         <OutputBlock
-          result={result ? prettyPrint(result, { notation }): '...'}
+          result={isDinero(result) ? prettyPrint(result as Dinero<number>, { notation }) : '...'}
           baseCurrency={baseCurrency}
           small={small}
         />

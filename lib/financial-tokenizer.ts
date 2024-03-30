@@ -47,7 +47,7 @@ const isNaN = (input: unknown): boolean => {
   return Number.isNaN(toNum);
 };
 
-const isDinero = (object: Record<string, unknown>) => {
+export const isDinero = (object: Record<string, unknown>) => {
   return object && typeof object.toJSON === 'function';
 };
 
