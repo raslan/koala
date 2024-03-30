@@ -26,11 +26,17 @@ import { useState } from 'react';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  searchableColumnName: string;
+  searchColumn: string;
+  pageSize?: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  searchableColumnName,
+  searchColumn,
+  pageSize = 15,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
@@ -45,21 +51,21 @@ export function DataTable<TData, TValue>({
     },
     initialState: {
       pagination: {
-        pageSize: 15,
+        pageSize,
       },
     },
   });
 
   return (
     <div>
-      <div className='flex items-center py-4'>
+      <div className='flex items-center pb-4'>
         <Input
-          placeholder='Filter currencies...'
+          placeholder={`Filter ${searchableColumnName}...`}
           value={
-            (table.getColumn('currency')?.getFilterValue() as string) ?? ''
+            (table.getColumn(searchColumn)?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
-            table.getColumn('currency')?.setFilterValue(event.target.value)
+            table.getColumn(searchColumn)?.setFilterValue(event.target.value)
           }
           className='max-w-sm'
         />
