@@ -185,6 +185,7 @@ export const evaluateNaturalExpression = (
 ) => {
   try {
     const uniformExpression = input
+      .toLowerCase()
       .replace(/,/g, '')
       .replace(/[$€£]/g, (match: any) => {
         const currencyCode = SymbolCodeMap[match as keyof typeof SymbolCodeMap];

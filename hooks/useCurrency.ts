@@ -1,4 +1,5 @@
 import { fetchRates } from '@/lib/actions';
+import { evaluateNaturalExpression } from '@/lib/financial-tokenizer';
 import { useCurrenciesStore } from '@/store/currencies';
 import { useCallback, useEffect } from 'react';
 import { useInterval } from 'usehooks-ts';
@@ -21,7 +22,20 @@ const useCurrency = () => {
   useEffect(() => {
     if (!rates?.[baseCurrency]) execute(baseCurrency, addCurrency);
   }, [baseCurrency, rates, addCurrency]);
+  const evaluate = useCallback(
+    (expr: string) => {
+      return evaluateNaturalExpression(expr, baseCurrency, rates[baseCurrency]);
+    },
+    [baseCurrency, rates]
+  );
 
-  return { rates, refresh, addCurrency, baseCurrency, setBaseCurrency };
+  return {
+    rates,
+    refresh,
+    addCurrency,
+    baseCurrency,
+    setBaseCurrency,
+    evaluate,
+  };
 };
 export default useCurrency;
