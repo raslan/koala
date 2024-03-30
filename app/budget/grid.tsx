@@ -265,7 +265,7 @@ export function BudgetDashboard() {
                     <p className='text-sm font-medium leading-none'>
                       {subscription.name}
                     </p>
-                    <p className='text-sm text-muted-foreground'>
+                    <p className='text-sm text-muted-foreground hidden lg:block'>
                       {subscription.url}
                     </p>
                   </div>
