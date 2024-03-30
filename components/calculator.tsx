@@ -1,23 +1,20 @@
 'use client';
+import RatesDrawer from '@/app/(rates)/rates-drawer';
 import { Button } from '@/components/ui/button';
 import { ComboBoxResponsive } from '@/components/ui/combobox';
 import { OutputBlock } from '@/components/ui/output-block';
 import { Textarea } from '@/components/ui/textarea';
 import useCurrency from '@/hooks/useCurrency';
-import {
-  evaluateNaturalExpression,
-  prettyPrint,
-} from '@/lib/financial-tokenizer';
+import { prettyPrint } from '@/lib/financial-tokenizer';
 import { cn, currencyOptions } from '@/lib/utils';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import RatesDrawer from '@/app/(rates)/rates-drawer';
+import { useSettingsStore } from '@/store/settings';
 import {
   ArrowUpIcon,
   EraserIcon,
   PlusCircledIcon,
 } from '@radix-ui/react-icons';
-import { useSettingsStore } from '@/store/settings';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 const CalculatorBlock = ({
   hideButtons = false,
@@ -29,7 +26,7 @@ const CalculatorBlock = ({
   preset?: string;
 }) => {
   const [result, setResult] = useState('');
-  const { rates, baseCurrency, setBaseCurrency } = useCurrency();
+  const { rates, baseCurrency, setBaseCurrency, evaluate } = useCurrency();
   const [entry, setEntry] = useState(preset);
   const { notation } = useSettingsStore();
   useEffect(() => {
@@ -37,16 +34,9 @@ const CalculatorBlock = ({
       if (entry && rates?.[baseCurrency]) {
         try {
           setResult(
-            prettyPrint(
-              evaluateNaturalExpression(
-                entry?.toLowerCase(),
-                baseCurrency,
-                rates[baseCurrency]
-              ),
-              {
-                notation,
-              }
-            )
+            prettyPrint(evaluate(entry), {
+              notation,
+            })
           );
         } catch (error) {
           setResult('...');
@@ -55,7 +45,7 @@ const CalculatorBlock = ({
         setResult('');
       }
     }
-  }, [entry, baseCurrency, rates, notation]);
+  }, [entry, baseCurrency, rates, notation, evaluate]);
   return (
     <>
       {!hideButtons && (

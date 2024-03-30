@@ -1,6 +1,6 @@
 'use client';
 import { currenciesWithNames, currencyOptions } from '@/lib/utils';
-import { DataTable } from '@/app/(rates)/data-table';
+import { DataTable } from '@/components/ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import { ComboBoxResponsive } from '@/components/ui/combobox';
 import useCurrency from '@/hooks/useCurrency';
@@ -70,12 +70,19 @@ const Rates = () => {
         View the exchange rates for your base currency.
       </p>
       <Separator className='my-2' />
-      <ComboBoxResponsive
-        options={currencyOptions}
-        selectedOption={baseCurrency}
-        setSelectedOption={setBaseCurrency}
+      <div className='my-4'>
+        <ComboBoxResponsive
+          options={currencyOptions}
+          selectedOption={baseCurrency}
+          setSelectedOption={setBaseCurrency}
+        />
+      </div>
+      <DataTable
+        columns={columns}
+        data={tableRates}
+        searchableColumnName='currencies'
+        searchColumn='currency'
       />
-      <DataTable columns={columns} data={tableRates} />
     </div>
   );
 };
