@@ -199,7 +199,7 @@ export function BudgetDashboard() {
             </CardContent>
           </Card>
         </div>
-        <div className='grid gap-4 md:gap-8 md:grid-cols-3 justify-center lg:justify-normal'>
+        <div className='grid gap-4 md:gap-8 md:grid-cols-2 justify-center lg:justify-normal'>
           <Card className='lg:col-span-2'>
             <CardHeader className='flex flex-col items-start lg:flex-row lg:items-center'>
               <div className='grid gap-2 w-full'>
