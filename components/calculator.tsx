@@ -34,9 +34,7 @@ const CalculatorBlock = ({
       if (entry && rates?.[baseCurrency]) {
         try {
           setResult(
-            prettyPrint(evaluate(entry), {
-              notation,
-            })
+            evaluate(entry)
           );
         } catch (error) {
           setResult('...');
@@ -45,7 +43,7 @@ const CalculatorBlock = ({
         setResult('');
       }
     }
-  }, [entry, baseCurrency, rates, notation, evaluate]);
+  }, [entry, baseCurrency, rates, evaluate]);
   return (
     <>
       {!hideButtons && (
@@ -85,7 +83,7 @@ const CalculatorBlock = ({
           <div className='flex max-w-sm'>
             <Button
               onClick={() => {
-                setEntry(result);
+                setEntry(`${baseCurrency}${result}`);
               }}
               variant='ghost'
               className='font-bold hidden md:inline-flex'
@@ -108,7 +106,7 @@ const CalculatorBlock = ({
             </Button>
             <Button
               onClick={() => {
-                setEntry(entry + ` + ${result}`);
+                setEntry(entry + ` + ${baseCurrency}${result}`);
               }}
               variant='ghost'
               className='font-bold hidden md:inline-flex'
@@ -121,7 +119,7 @@ const CalculatorBlock = ({
       </div>
       {entry && Boolean(rates?.[baseCurrency]) && result && (
         <OutputBlock
-          result={result}
+          result={prettyPrint(result, { notation })}
           baseCurrency={baseCurrency}
           small={small}
         />
