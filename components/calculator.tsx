@@ -8,6 +8,7 @@ import useCurrency from '@/hooks/useCurrency';
 import { prettyPrint } from '@/lib/financial-tokenizer';
 import { cn, currencyOptions } from '@/lib/utils';
 import { useSettingsStore } from '@/store/settings';
+import { Dinero } from 'dinero.js';
 import {
   ArrowUpIcon,
   EraserIcon,
@@ -25,7 +26,7 @@ const CalculatorBlock = ({
   small?: boolean;
   preset?: string;
 }) => {
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState<Dinero<number> | undefined>();
   const { rates, baseCurrency, setBaseCurrency, evaluate } = useCurrency();
   const [entry, setEntry] = useState(preset);
   const { notation } = useSettingsStore();
@@ -33,9 +34,7 @@ const CalculatorBlock = ({
     if (rates?.USD) {
       if (entry && rates?.[baseCurrency]) {
         try {
-          setResult(
-            evaluate(entry)
-          );
+          setResult(evaluate(entry));
         } catch (error) {
           setResult('...');
         }
