@@ -36,10 +36,10 @@ const CalculatorBlock = ({
         try {
           setResult(evaluate(entry));
         } catch (error) {
-          setResult('...');
+          setResult();
         }
       } else {
-        setResult('');
+        setResult();
       }
     }
   }, [entry, baseCurrency, rates, evaluate]);
@@ -116,9 +116,9 @@ const CalculatorBlock = ({
           </div>
         )}
       </div>
-      {entry && Boolean(rates?.[baseCurrency]) && result && (
+      {entry && Boolean(rates?.[baseCurrency]) && (
         <OutputBlock
-          result={prettyPrint(result, { notation })}
+          result={prettyPrint(result, { notation }) ?? '...'}
           baseCurrency={baseCurrency}
           small={small}
         />
