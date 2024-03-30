@@ -118,7 +118,7 @@ const CalculatorBlock = ({
       </div>
       {entry && Boolean(rates?.[baseCurrency]) && (
         <OutputBlock
-          result={prettyPrint(result, { notation }) ?? '...'}
+          result={result ? prettyPrint(result, { notation }): '...'}
           baseCurrency={baseCurrency}
           small={small}
         />
