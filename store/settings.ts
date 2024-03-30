@@ -3,8 +3,6 @@ import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-export type Rates = Record<string, Record<string, number>>;
-
 export type SettingsState = {
   notation: 'standard' | 'compact';
 };
