@@ -134,7 +134,7 @@ export function BudgetDashboard() {
   }, [evaluatorFn]);
   return (
     <div className='flex w-full flex-col pb-32 lg:pb-0'>
-      <main className='flex flex-1 flex-col gap-4 p-4 md:gap-4'>
+      <main className='flex flex-1 flex-col gap-4 p-4 md:gap-4 xl:gap-6'>
         <div className='grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4'>
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
@@ -199,7 +199,7 @@ export function BudgetDashboard() {
             </CardContent>
           </Card>
         </div>
-        <div className='grid gap-4 md:gap-8 md:grid-cols-2 justify-center lg:justify-normal'>
+        <div className='grid gap-4 md:gap-8 md:grid-cols-2 lg:grid-cols-3 justify-center lg:justify-normal'>
           <Card className='lg:col-span-2'>
             <CardHeader className='flex flex-col items-start lg:flex-row lg:items-center'>
               <div className='grid gap-2 w-full'>
