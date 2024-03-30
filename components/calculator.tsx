@@ -36,10 +36,10 @@ const CalculatorBlock = ({
         try {
           setResult(evaluate(entry));
         } catch (error) {
-          setResult();
+          setResult(undefined);
         }
       } else {
-        setResult();
+        setResult(undefined);
       }
     }
   }, [entry, baseCurrency, rates, evaluate]);
