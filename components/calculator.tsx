@@ -82,7 +82,7 @@ const CalculatorBlock = ({
           <div className='flex max-w-sm'>
             <Button
               onClick={() => {
-                setEntry(`${baseCurrency}${result}`);
+                setEntry(`${prettyPrint(result, {currencyDisplay: 'code'})}`);
               }}
               variant='ghost'
               className='font-bold hidden md:inline-flex'
@@ -105,7 +105,7 @@ const CalculatorBlock = ({
             </Button>
             <Button
               onClick={() => {
-                setEntry(entry + ` + ${baseCurrency}${result}`);
+                setEntry(entry + ` + ${prettyPrint(result, {currencyDisplay: 'code'})}`);
               }}
               variant='ghost'
               className='font-bold hidden md:inline-flex'

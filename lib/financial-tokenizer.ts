@@ -20,7 +20,7 @@ const SymbolCodeMap = {
 };
 
 const createTransformer =
-  (formatOptions?: { notation?: SettingsState['notation'] }) =>
+  (formatOptions?: { notation?: SettingsState['notation'], currencyDisplay?: 'code' | 'symbol' | 'narrowSymbol' | 'name' }) =>
   ({
     value,
     currency,
@@ -35,6 +35,9 @@ const createTransformer =
       currency: currency.code,
       ...(formatOptions?.notation && {
         notation: formatOptions.notation,
+      }),
+      ...(formatOptions?.currencyDisplay && {
+        currencyDisplay: formatOptions.currencyDisplay,
       }),
     })}`;
   };
@@ -175,6 +178,7 @@ export const prettyPrint = (
   el: Dinero<number>,
   formatOptions?: {
     notation?: SettingsState['notation'];
+    currencyDisplay?: 'code' | 'symbol' | 'narrowSymbol' | 'name'
   }
 ) => toDecimal(el as Dinero<number>, createTransformer(formatOptions));
 
