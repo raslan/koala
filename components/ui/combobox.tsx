@@ -23,6 +23,7 @@ import {
 export type Option = {
   value: string;
   label: string;
+  icon?: React.ReactNode;
 };
 
 export function ComboBoxResponsive({
@@ -97,27 +98,31 @@ function OptionList({
 }) {
   return (
     <Command>
-      <CommandInput placeholder='Pick a currency...' />
+      <CommandInput placeholder='Search...' />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
-          {options.map((option: Option) => (
-            <CommandItem
-              className='text-lg md:text-base'
-              key={option.value}
-              value={option.label}
-              onSelect={(value) => {
-                setSelectedOption(
-                  options?.find?.(
-                    (opt) => opt?.label.toLowerCase() === value?.toLowerCase()
-                  )?.value as string
-                );
-                setOpen(false);
-              }}
-            >
-              {option.label}
-            </CommandItem>
-          ))}
+          {options.map((option: Option) => {
+            const Icon = () => option?.icon;
+            return (
+              <CommandItem
+                className='text-lg md:text-base'
+                key={option.value}
+                value={option.label}
+                onSelect={(value) => {
+                  setSelectedOption(
+                    options?.find?.(
+                      (opt) => opt?.label.toLowerCase() === value?.toLowerCase()
+                    )?.value as string
+                  );
+                  setOpen(false);
+                }}
+              >
+                {Icon && <Icon />}
+                {option.label}
+              </CommandItem>
+            );
+          })}
         </CommandGroup>
       </CommandList>
     </Command>
