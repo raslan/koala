@@ -5,7 +5,7 @@ import { ComboBoxResponsive } from '@/components/ui/combobox';
 import { OutputBlock } from '@/components/ui/output-block';
 import { Textarea } from '@/components/ui/textarea';
 import useCurrency from '@/hooks/useCurrency';
-import { prettyPrint, isDinero } from '@/lib/financial-tokenizer';
+import { prettyPrint } from '@/lib/financial-tokenizer';
 import { cn, currencyOptions } from '@/lib/utils';
 import { useSettingsStore } from '@/store/settings';
 import { Dinero } from 'dinero.js';
@@ -28,17 +28,33 @@ const CalculatorBlock = ({
 }) => {
   const [result, setResult] = useState<Dinero<number> | undefined>();
   const { rates, baseCurrency, setBaseCurrency, evaluate } = useCurrency();
+  const [overrideCurrency, setOverrideCurrency] = useState<
+    string | undefined
+  >();
   const [entry, setEntry] = useState(preset);
   const { notation } = useSettingsStore();
   useEffect(() => {
     if (rates?.USD) {
       if (entry && rates?.[baseCurrency]) {
         try {
-          setResult(evaluate(entry));
+          let modifiedEntry = entry;
+          const regex = /(to|in)\s([A-Za-z]{3})$/;
+          const match = entry.match(regex);
+          if (match) {
+            modifiedEntry = entry.replace(regex, '');
+            const currencyCode = match[2]?.toUpperCase?.();
+            setOverrideCurrency(currencyCode);
+            setResult(evaluate(modifiedEntry, currencyCode));
+          } else {
+            setOverrideCurrency(undefined);
+            setResult(evaluate(entry));
+          }
         } catch (error) {
+          setOverrideCurrency(undefined);
           setResult(undefined);
         }
       } else {
+        setOverrideCurrency(undefined);
         setResult(undefined);
       }
     }
@@ -110,10 +126,13 @@ const CalculatorBlock = ({
             </Button>
             <Button
               onClick={() => {
-                result && setEntry(
-                  entry +
-                    ` + ${prettyPrint(result as Dinero<number>, { currencyDisplay: 'code' })}`
-                );
+                result &&
+                  setEntry(
+                    entry +
+                      ` + ${prettyPrint(result as Dinero<number>, {
+                        currencyDisplay: 'code',
+                      })}`
+                  );
               }}
               variant='ghost'
               className='font-bold hidden md:inline-flex'
@@ -126,8 +145,15 @@ const CalculatorBlock = ({
       </div>
       {entry && Boolean(rates?.[baseCurrency]) && (
         <OutputBlock
-          result={result ? prettyPrint(result as Dinero<number>, { notation }) : '...'}
-          baseCurrency={baseCurrency}
+          result={
+            result
+              ? prettyPrint(result as Dinero<number>, {
+                  notation,
+                  overrideCurrency,
+                })
+              : '...'
+          }
+          baseCurrency={overrideCurrency ?? baseCurrency}
           small={small}
         />
       )}

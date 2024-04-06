@@ -15,18 +15,27 @@ async function execute(
 const useCurrency = () => {
   const { rates, addCurrency, baseCurrency, setBaseCurrency } =
     useCurrenciesStore();
-  const refresh = useCallback(() => {
-    execute(baseCurrency, addCurrency);
-  }, [baseCurrency, addCurrency]);
+  const refresh = useCallback(
+    (overrideCurrency?: string) => {
+      execute(baseCurrency, addCurrency);
+      if (overrideCurrency) execute(overrideCurrency, addCurrency);
+    },
+    [baseCurrency, addCurrency]
+  );
   useInterval(() => refresh(), 600000);
   useEffect(() => {
     if (!rates?.[baseCurrency]) execute(baseCurrency, addCurrency);
   }, [baseCurrency, rates, addCurrency]);
   const evaluate = useCallback(
-    (expr: string) => {
-      return evaluateNaturalExpression(expr, baseCurrency, rates[baseCurrency]);
+    (expr: string, overrideCurrency?: string) => {
+      if (overrideCurrency) refresh(overrideCurrency);
+      return evaluateNaturalExpression(
+        expr,
+        overrideCurrency ?? baseCurrency,
+        rates[overrideCurrency ?? baseCurrency]
+      );
     },
-    [baseCurrency, rates]
+    [baseCurrency, rates, refresh]
   );
 
   return {

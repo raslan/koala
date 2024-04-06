@@ -20,7 +20,11 @@ const SymbolCodeMap = {
 };
 
 const createTransformer =
-  (formatOptions?: { notation?: SettingsState['notation'], currencyDisplay?: 'code' | 'symbol' | 'narrowSymbol' | 'name' }) =>
+  (formatOptions?: {
+    notation?: SettingsState['notation'];
+    overrideCurrency?: string;
+    currencyDisplay?: 'code' | 'symbol' | 'narrowSymbol' | 'name';
+  }) =>
   ({
     value,
     currency,
@@ -32,7 +36,7 @@ const createTransformer =
   }) => {
     return `${Number(value).toLocaleString('en-US', {
       style: 'currency',
-      currency: currency.code,
+      currency: formatOptions?.overrideCurrency ?? currency.code,
       ...(formatOptions?.notation && {
         notation: formatOptions.notation,
       }),
@@ -178,7 +182,8 @@ export const prettyPrint = (
   el: Dinero<number>,
   formatOptions?: {
     notation?: SettingsState['notation'];
-    currencyDisplay?: 'code' | 'symbol' | 'narrowSymbol' | 'name'
+    currencyDisplay?: 'code' | 'symbol' | 'narrowSymbol' | 'name';
+    overrideCurrency?: string;
   }
 ) => toDecimal(el as Dinero<number>, createTransformer(formatOptions));
 
