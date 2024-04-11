@@ -121,7 +121,7 @@ const CalculatorBlock = ({
                 selectedOption={'+ Add a currency'}
                 buttonText='+ Add a currency'
                 setSelectedOption={(option) => {
-                  setEntry(entry + `  ${option} `);
+                  setEntry(entry.trim() + ` ${option} `);
                 }}
               />
               <Button
