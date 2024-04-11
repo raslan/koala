@@ -19,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 export type Option = {
   value: string;
@@ -31,11 +32,13 @@ export function ComboBoxResponsive({
   selectedOption,
   setSelectedOption,
   desktopMode,
+  buttonText,
 }: {
   options: Option[];
   selectedOption: string;
   setSelectedOption: (Option: string) => void;
   desktopMode?: boolean;
+  buttonText?: string;
 }) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)') || desktopMode;
@@ -46,9 +49,12 @@ export function ComboBoxResponsive({
         <PopoverTrigger asChild>
           <Button
             variant='ghost'
-            className='w-auto justify-start border-foreground border-2'
+            className={cn(
+              'w-auto justify-start',
+              buttonText ? '' : 'border-foreground border-2'
+            )}
           >
-            {selected ? <>{selected.label}</> : <>+ Set Option</>}
+            {selected ? <>{selected.label}</> : <>{buttonText}</>}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
@@ -67,10 +73,13 @@ export function ComboBoxResponsive({
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button
-          variant='default'
-          className='w-auto justify-start bg-foreground'
+          variant={buttonText ? 'ghost' : 'default'}
+          className={cn(
+            'w-auto justify-start',
+            buttonText ? '' : 'border-foreground border-2'
+          )}
         >
-          {selected ? <>{selected.label}</> : <>+ Set Option</>}
+          {selected ? <>{selected.label}</> : <>{buttonText}</>}
           <ChevronDownIcon />
         </Button>
       </DrawerTrigger>

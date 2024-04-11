@@ -16,6 +16,7 @@ import {
 } from '@radix-ui/react-icons';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import TextInput from 'react-autocomplete-input';
 
 const CalculatorBlock = ({
   hideButtons = false,
@@ -84,62 +85,91 @@ const CalculatorBlock = ({
         </div>
       )}
       <div className='w-full flex flex-col items-center justify-between gap-3'>
-        <Textarea
-          id='equation-input'
+        <TextInput
           placeholder='Enter your equation to start calculating...'
           value={entry}
-          onChange={(e) => setEntry(e.target.value)}
+          aria-label='Enter your equation to start calculating...'
+          aria-required
+          aria-invalid={Boolean(entry && !result)}
+          aria-describedby='Calculation-Input'
+          maxOptions={1000}
+          onChange={(e: string) => setEntry(e)}
+          changeOnSelect={(_: any, s: string) => {
+            return (
+              ' ' +
+              currencyOptions?.find?.((option) => option.label === s)?.value
+            );
+          }}
+          trigger={['. ', '  ', '@']}
+          matchAny
+          options={{
+            '. ': currencyOptions?.map?.((option) => option.label),
+            '  ': currencyOptions?.map?.((option) => option.label),
+            '@': currencyOptions?.map?.((option) => option.label),
+          }}
           className={cn(
+            'flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
             'text-2xl text-center font-semibold border-primary/20 border-2',
             small ? 'my-4' : 'mt-4 md:mt-8 py-8 md:pt-16 md:pb-8 md:text-3xl'
           )}
         />
         {!small && (
-          <div className='flex max-w-sm'>
-            <Button
-              onClick={() => {
-                result &&
-                  setEntry(
-                    `${prettyPrint(result as Dinero<number>, {
-                      currencyDisplay: 'code',
-                    })}`
-                  );
-              }}
-              variant='ghost'
-              className='font-bold hidden md:inline-flex'
-            >
-              <ArrowUpIcon className='mr-1' />
-              Use just output
-            </Button>
-            <Button
-              onClick={() => {
-                setEntry('');
-                toast.info('Input cleared.', {
-                  position: 'top-right',
-                });
-              }}
-              variant='ghost'
-              className='font-bold'
-            >
-              <EraserIcon className='mr-1' />
-              Clear
-            </Button>
-            <Button
-              onClick={() => {
-                result &&
-                  setEntry(
-                    entry +
-                      ` + ${prettyPrint(result as Dinero<number>, {
+          <div className='flex flex-col lg:flex-row m-auto lg:max-w-xl'>
+            <div className='flex w-full justify-between'>
+              <ComboBoxResponsive
+                options={currencyOptions}
+                selectedOption={'+ Add a currency'}
+                buttonText='+ Add a currency'
+                setSelectedOption={(option) => {
+                  setEntry(entry + `  ${option} `);
+                }}
+              />
+              <Button
+                onClick={() => {
+                  setEntry('');
+                  toast.info('Input cleared.', {
+                    position: 'top-right',
+                  });
+                }}
+                variant='ghost'
+                className='font-bold'
+              >
+                <EraserIcon className='mr-1' />
+                Clear
+              </Button>
+            </div>
+            <div className='flex w-full justify-between'>
+              <Button
+                onClick={() => {
+                  result &&
+                    setEntry(
+                      `${prettyPrint(result as Dinero<number>, {
                         currencyDisplay: 'code',
                       })}`
-                  );
-              }}
-              variant='ghost'
-              className='font-bold hidden md:inline-flex'
-            >
-              <PlusCircledIcon className='mr-1' />
-              Add output back
-            </Button>
+                    );
+                }}
+                variant='ghost'
+              >
+                <ArrowUpIcon className='mr-1' />
+                Use just output
+              </Button>
+              <Button
+                onClick={() => {
+                  result &&
+                    setEntry(
+                      entry +
+                        ` + ${prettyPrint(result as Dinero<number>, {
+                          currencyDisplay: 'code',
+                        })}`
+                    );
+                }}
+                variant='ghost'
+                className='font-bold'
+              >
+                <PlusCircledIcon className='mr-1' />
+                Add output back
+              </Button>
+            </div>
           </div>
         )}
       </div>

@@ -637,9 +637,15 @@ const supportedCurrencies = [
   'ZWD',
 ];
 
+const popularCurrencies = ['EGP', 'GBP', 'EUR', 'USD'];
+
 export const currencyOptions = Object.keys(Currencies)
   .filter((currency) => supportedCurrencies.includes(currency))
   .map((currency) => ({
     label: getCurrencyName(currency as keyof typeof Currencies),
     value: currency,
-  }));
+  }))
+  .sort(
+    (a, b) =>
+      popularCurrencies.indexOf(b.value) - popularCurrencies.indexOf(a.value)
+  );

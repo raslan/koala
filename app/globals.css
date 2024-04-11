@@ -169,3 +169,33 @@ body > [role='dialog'] {
 .rccs__chip {
   @apply saturate-0;
 }
+
+.react-autocomplete-input {
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  bottom: auto;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  display: block;
+  font-size: 14px;
+  list-style: none;
+  padding: 1px;
+  position: fixed;
+  text-align: left;
+  z-index: 20000;
+  overflow-y: scroll;
+  margin-top: 3em;
+  max-height: 16rem;
+  overflow-y: scroll;
+}
+
+.react-autocomplete-input > li {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  cursor: pointer;
+  padding: 10px;
+  min-width: 100px;
+}
+
+.react-autocomplete-input > li.active {
+  background-color: hsl(var(--secondary));
+}
