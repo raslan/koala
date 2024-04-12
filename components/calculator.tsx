@@ -42,8 +42,8 @@ const CalculatorBlock = ({
       if (entry && rates?.[baseCurrency]) {
         try {
           let modifiedEntry = entry;
-          const regex = /(to|in)\s([A-Za-z]{3})\s+?$/;
-          const match = entry.match(regex);
+          const regex = /(to|in)\s([A-Za-z]{3})$/;
+          const match = entry?.trim?.()?.match?.(regex);
           if (match) {
             modifiedEntry = entry.replace(regex, '');
             const currencyCode = match[2]?.toUpperCase?.();
