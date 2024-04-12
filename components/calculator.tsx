@@ -45,7 +45,7 @@ const CalculatorBlock = ({
             modifiedEntry = entry.replace(regex, '');
             const currencyCode = match[2]?.toUpperCase?.();
             setOverrideCurrency(currencyCode);
-            setResult(evaluate(modifiedEntry, currencyCode));
+            setResult(evaluate(modifiedEntry?.trim?.() ?? '', currencyCode));
           } else {
             setOverrideCurrency(undefined);
             setResult(evaluate(entry));
