@@ -113,7 +113,7 @@ export function BudgetDashboard() {
   const evaluatorFn = useCallback(
     (amount: { currency: string; value: number }, convert?: boolean) =>
       convert || autoConvert
-        ? `${prettyPrint(evaluate(`${amount.currency}${amount.value}`), {
+        ? `${prettyPrint(evaluate(`${amount.currency}${amount.value}`)?.value, {
             notation,
           })}`
         : quickPrint(amount, notation),
