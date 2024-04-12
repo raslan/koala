@@ -3,20 +3,23 @@ import RatesDrawer from '@/app/(rates)/rates-drawer';
 import { Button } from '@/components/ui/button';
 import { ComboBoxResponsive } from '@/components/ui/combobox';
 import { OutputBlock } from '@/components/ui/output-block';
-import { Textarea } from '@/components/ui/textarea';
 import useCurrency from '@/hooks/useCurrency';
 import { prettyPrint } from '@/lib/financial-tokenizer';
 import { cn, currencyOptions } from '@/lib/utils';
 import { useSettingsStore } from '@/store/settings';
-import { Dinero } from 'dinero.js';
 import {
   ArrowUpIcon,
   EraserIcon,
   PlusCircledIcon,
 } from '@radix-ui/react-icons';
+import { Dinero } from 'dinero.js';
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import TextInput from 'react-autocomplete-input';
+import { toast } from 'sonner';
+
+const fillableCurrencyOptions = currencyOptions?.map?.(
+  (option) => option.label
+);
 
 const CalculatorBlock = ({
   hideButtons = false,
@@ -103,9 +106,9 @@ const CalculatorBlock = ({
           trigger={['. ', '  ', '@']}
           matchAny
           options={{
-            '. ': currencyOptions?.map?.((option) => option.label),
-            '  ': currencyOptions?.map?.((option) => option.label),
-            '@': currencyOptions?.map?.((option) => option.label),
+            '. ': fillableCurrencyOptions,
+            '  ': fillableCurrencyOptions,
+            '@': fillableCurrencyOptions,
           }}
           className={cn(
             'flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
@@ -116,14 +119,6 @@ const CalculatorBlock = ({
         {!small && (
           <div className='flex flex-col lg:flex-row m-auto lg:max-w-xl'>
             <div className='flex w-full justify-between'>
-              <ComboBoxResponsive
-                options={currencyOptions}
-                selectedOption={'+ Add a currency'}
-                buttonText='+ Add a currency'
-                setSelectedOption={(option) => {
-                  setEntry(entry.trim() + ` ${option} `);
-                }}
-              />
               <Button
                 onClick={() => {
                   setEntry('');
@@ -137,6 +132,14 @@ const CalculatorBlock = ({
                 <EraserIcon className='mr-1' />
                 Clear
               </Button>
+              <ComboBoxResponsive
+                options={currencyOptions}
+                selectedOption={'+ Add a currency'}
+                buttonText='+ Add a currency'
+                setSelectedOption={(option) => {
+                  setEntry(entry.trim() + ` ${option} `);
+                }}
+              />
             </div>
             <div className='flex w-full justify-between'>
               <Button
