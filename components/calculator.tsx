@@ -42,7 +42,7 @@ const CalculatorBlock = ({
       if (entry && rates?.[baseCurrency]) {
         try {
           let modifiedEntry = entry;
-          const regex = /(to|in)\s([A-Za-z]{3})$/;
+          const regex = /(to|in)\s([A-Za-z]{3})\s+?$/;
           const match = entry.match(regex);
           if (match) {
             modifiedEntry = entry.replace(regex, '');
