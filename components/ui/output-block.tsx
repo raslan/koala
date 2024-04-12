@@ -24,7 +24,7 @@ export const OutputBlock = ({
     <div className='animate-in mt-2 duration-700 transform flex flex-col items-center'>
       <TooltipProvider delayDuration={100}>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button
               onClick={() => {
                 copy(result);

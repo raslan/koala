@@ -191,7 +191,10 @@ export const evaluateNaturalExpression = (
   input: string,
   baseCurrency: string = 'USD',
   rates: any
-) => {
+): {
+  value: Dinero<number>;
+  currency: string;
+} => {
   try {
     const uniformExpression = input
       .toLowerCase()
@@ -258,7 +261,10 @@ export const evaluateNaturalExpression = (
         )
         .join(' ')
     )}`;
-    return strToDinero(val, baseCurrency, baseCurrencyExchangeRates);
+    return {
+      value: strToDinero(val, baseCurrency, baseCurrencyExchangeRates),
+      currency: baseCurrency,
+    };
   } catch (error: any) {
     throw new Error(
       `An error occurred while evaluating the expression: ${error?.message}`

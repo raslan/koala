@@ -3,7 +3,7 @@ import { Heading } from '@/components/ui/heading';
 
 export default function HomePage() {
   return (
-    <div>
+    <div className='h-full'>
       <Heading>Calculator</Heading>
       <CalculatorBlock />
     </div>

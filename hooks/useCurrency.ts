@@ -22,13 +22,16 @@ const useCurrency = () => {
     },
     [baseCurrency, addCurrency]
   );
-  useInterval(() => refresh(), 600000);
+  useInterval(() => {
+    refresh();
+  }, 300000);
   useEffect(() => {
     if (!rates?.[baseCurrency]) execute(baseCurrency, addCurrency);
   }, [baseCurrency, rates, addCurrency]);
   const evaluate = useCallback(
     (expr: string, overrideCurrency?: string) => {
-      if (overrideCurrency) refresh(overrideCurrency);
+      if (overrideCurrency && !rates?.[overrideCurrency]?.USD)
+        refresh(overrideCurrency);
       return evaluateNaturalExpression(
         expr,
         overrideCurrency ?? baseCurrency,
