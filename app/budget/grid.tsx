@@ -237,7 +237,7 @@ export function BudgetDashboard() {
                 ]}
                 data={tableTransactions}
                 searchColumn='name'
-                searchableColumnName='transactions'
+                searchableColumnName='Search transactions...'
                 pageSize={5}
               />
             </CardContent>

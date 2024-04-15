@@ -1,4 +1,3 @@
-'use client';
 import { Button } from '@/components/ui/button';
 
 import {
@@ -9,6 +8,8 @@ import {
   getPaginationRowModel,
   ColumnFiltersState,
   getFilteredRowModel,
+  SortingState,
+  getSortedRowModel,
 } from '@tanstack/react-table';
 
 import {
@@ -39,6 +40,7 @@ export function DataTable<TData, TValue>({
   pageSize = 15,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
     data,
     columns,
@@ -46,8 +48,11 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
     state: {
       columnFilters,
+      sorting,
     },
     initialState: {
       pagination: {
@@ -60,7 +65,7 @@ export function DataTable<TData, TValue>({
     <div>
       <div className='flex items-center pb-4'>
         <Input
-          placeholder={`Filter ${searchableColumnName}...`}
+          placeholder={`${searchableColumnName}`}
           value={
             (table.getColumn(searchColumn)?.getFilterValue() as string) ?? ''
           }

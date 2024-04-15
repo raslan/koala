@@ -80,7 +80,7 @@ const Rates = () => {
       <DataTable
         columns={columns}
         data={tableRates}
-        searchableColumnName='currencies'
+        searchableColumnName='Search currencies...'
         searchColumn='currency'
       />
     </div>
