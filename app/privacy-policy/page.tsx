@@ -42,7 +42,7 @@ const PrivacyPolicy = () => {
         </li>
         <li>
           <p>
-            <strong>Application</strong> refers to Koalify, the software program
+            <strong>Application</strong> refers to Koala, the software program
             provided by the Company.
           </p>
         </li>
@@ -50,7 +50,7 @@ const PrivacyPolicy = () => {
           <p>
             <strong>Company</strong> (referred to as either &quot;the
             Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in
-            this Agreement) refers to Koalify.
+            this Agreement) refers to Koala.
           </p>
         </li>
         <li>
@@ -110,13 +110,13 @@ const PrivacyPolicy = () => {
         </li>
         <li>
           <p>
-            <strong>Website</strong> refers to Koalify, accessible from{' '}
+            <strong>Website</strong> refers to Koala, accessible from{' '}
             <a
-              href='https://koalify.raslan.dev'
+              href='https://koala.raslan.dev'
               rel='external nofollow noopener'
               target='_blank'
             >
-              https://koalify.raslan.dev
+              https://koala.raslan.dev
             </a>
           </p>
         </li>

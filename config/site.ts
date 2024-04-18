@@ -1,7 +1,7 @@
 export const siteConfig = {
-  name: 'koala',
-  url: 'https://koalify.raslan.dev',
-  ogImage: 'https://koalify.raslan.dev/og.png',
+  name: 'Koala Finance',
+  url: 'https://koala.raslan.dev',
+  ogImage: 'https://koala.raslan.dev/og.png',
   description:
     'A financial calculator and toolbox for the future. Powered by Koalas. Open source.',
   links: {
