@@ -158,7 +158,7 @@ export default function Navigation({
         defaultValue={defaultOption}
         className='fixed bottom-0 z-50 w-full max-h-40 bg-background'
       >
-        <TabsList className='grid items-center justify-around w-full h-full grid-cols-5 bg-transparent'>
+        <TabsList className='grid items-center justify-around w-full h-full grid-cols-4 bg-transparent'>
           {pages.map(({ href, title, icon: Icon }) => (
             <Link
               className={cn(
