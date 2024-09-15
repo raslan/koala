@@ -140,6 +140,27 @@ const strToDinero = (
       );
 };
 
+const removeCurrencyFromDineroStr = (str: string): number => {
+  // regex to capture optional decimal part
+  const reg: RegExp = /^([A-Z]+)(-?\d+)(?:\.(\d+))?$/;
+  const matchString = str.match(reg);
+
+  const amountStr = `${matchString?.[2]}${
+    matchString?.[3] ? `.${matchString[3]}` : ''
+  }`;
+  const amount = parseFloat(amountStr);
+
+  return amount;
+};
+
+const extractCurrencyFromDineroStr = (str: string): string => {
+  // regex to capture optional decimal part
+  const reg: RegExp = /^([A-Z]+)(-?\d+)(?:\.(\d+))?$/;
+  const matchString = str.match(reg);
+  const currency = CurrencyMap[matchString?.[1] as keyof typeof CurrencyMap];
+  return currency?.code;
+};
+
 export const getInverseRates = (
   targetCurrency: string,
   baseCurrency: string = 'USD',
@@ -187,6 +208,57 @@ export const prettyPrint = (
   }
 ) => toDecimal(el as Dinero<number>, createTransformer(formatOptions));
 
+const tokenizeInput = (input: string): string[] =>
+  input
+    .toLowerCase()
+    .replace(/,/g, '')
+    .replace(/[$€£]/g, (match: any) => {
+      const currencyCode = SymbolCodeMap[match as keyof typeof SymbolCodeMap];
+      return currencyCode ? currencyCode : match;
+    })
+    .replace(/[\(\)]|\s+/g, (match: string) => {
+      switch (match) {
+        case '(':
+          return '( ';
+        case ')':
+          return ' )';
+        default:
+          return ' ';
+      }
+    })
+    .replace(
+      /([^a-zA-Z])([kmbtKMBT])(?![a-zA-Z])/g,
+      (match: any, p1: string, p2: string) => {
+        switch (p2) {
+          case 'k':
+            return p1 + ' * 1000';
+          case 'm':
+            return p1 + ' * 1000000';
+          case 'b':
+            return p1 + ' * 1000000000';
+          case 't':
+            return p1 + ' * 1000000000000';
+          default:
+            return match;
+        }
+      }
+    )
+    .replace(/\b(thousand|million|billion|trillion)\b/g, (match: any) => {
+      switch (match.toLowerCase()) {
+        case 'thousand':
+          return ' * 1000';
+        case 'million':
+          return ' * 1000000';
+        case 'billion':
+          return ' * 1000000000';
+        case 'trillion':
+          return ' * 1000000000000';
+        default:
+          return match;
+      }
+    })
+    .split(' ');
+
 export const evaluateNaturalExpression = (
   input: string,
   baseCurrency: string = 'USD',
@@ -196,55 +268,7 @@ export const evaluateNaturalExpression = (
   currency: string;
 } => {
   try {
-    const uniformExpression = input
-      .toLowerCase()
-      .replace(/,/g, '')
-      .replace(/[$€£]/g, (match: any) => {
-        const currencyCode = SymbolCodeMap[match as keyof typeof SymbolCodeMap];
-        return currencyCode ? currencyCode : match;
-      })
-      .replace(/[\(\)]|\s+/g, (match: string) => {
-        switch (match) {
-          case '(':
-            return '( ';
-          case ')':
-            return ' )';
-          default:
-            return ' ';
-        }
-      })
-      .replace(
-        /([^a-zA-Z])([kmbtKMBT])(?![a-zA-Z])/g,
-        (match: any, p1: string, p2: string) => {
-          switch (p2) {
-            case 'k':
-              return p1 + ' * 1000';
-            case 'm':
-              return p1 + ' * 1000000';
-            case 'b':
-              return p1 + ' * 1000000000';
-            case 't':
-              return p1 + ' * 1000000000000';
-            default:
-              return match;
-          }
-        }
-      )
-      .replace(/\b(thousand|million|billion|trillion)\b/g, (match: any) => {
-        switch (match.toLowerCase()) {
-          case 'thousand':
-            return ' * 1000';
-          case 'million':
-            return ' * 1000000';
-          case 'billion':
-            return ' * 1000000000';
-          case 'trillion':
-            return ' * 1000000000000';
-          default:
-            return match;
-        }
-      })
-      .split(' ');
+    const uniformExpression = tokenizeInput(input);
     const tokens = handleSpaces(uniformExpression).map(cleanString);
     const baseCurrencyExchangeRates = convertRatesToDineroFormat(rates);
     const formattedTokens = tokens.map((token: string) =>
@@ -264,6 +288,33 @@ export const evaluateNaturalExpression = (
     return {
       value: strToDinero(val, baseCurrency, baseCurrencyExchangeRates),
       currency: baseCurrency,
+    };
+  } catch (error: any) {
+    throw new Error(
+      `An error occurred while evaluating the expression: ${error?.message}`
+    );
+  }
+};
+
+export const calculateInputNumber = (
+  input: string
+): {
+  currency: string;
+  amount: number;
+} => {
+  try {
+    const uniformExpression = tokenizeInput(input);
+    const tokens = handleSpaces(uniformExpression).map(cleanString);
+    const currency = extractCurrencyFromDineroStr(
+      tokens.find((token: any) => /[A-Z]{3,4}/.test(token)) as string
+    );
+    const formattedTokens = tokens.map((token: string) =>
+      /[A-Z]{3,4}/.test(token) ? removeCurrencyFromDineroStr(token) : token
+    );
+    const amount = evaluate(formattedTokens.join(' '));
+    return {
+      currency,
+      amount,
     };
   } catch (error: any) {
     throw new Error(
