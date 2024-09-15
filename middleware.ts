@@ -1,22 +1,19 @@
-// import { clerkMiddleware } from '@clerk/nextjs/server';
+import { clerkMiddleware } from '@clerk/nextjs/server';
+import { NextResponse, NextRequest, NextFetchEvent } from 'next/server';
 
-// export default clerkMiddleware();
+export const config = {
+  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+};
 
-// export const config = {
-//   matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
-// };
-
-import { NextResponse } from 'next/server';
-
-export function middleware(request: Request) {
-  // Store current request url in a custom header, which you can read later
+function handler(_auth: any, request: NextRequest, event: NextFetchEvent) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-url', request.url);
 
   return NextResponse.next({
     request: {
-      // Apply new request headers
       headers: requestHeaders,
     },
   });
 }
+
+export default clerkMiddleware(handler);

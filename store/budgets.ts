@@ -4,27 +4,42 @@ import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 export type BudgetState = {
-  income: Map<string, Record<string, unknown>>;
-  expenses: Map<string, Record<string, unknown>>;
-  subscriptions: Map<string, Record<string, unknown>>;
-  buckets: Map<string, Record<string, unknown>>;
-  categories?: Map<string, Record<string, unknown>>;
+  budget: {
+    income: {
+      id?: string;
+      lineItems: Record<string, unknown>[];
+    };
+    expenses: {
+      id?: string;
+      lineItems: Record<string, unknown>[];
+    };
+  };
 };
 
 export type BudgetActions = {
   updateState: (updater: (state: Draft<BudgetState>) => void) => void;
+  setBudget: (budget: BudgetState['budget']) => void;
 };
 
 export const useBudgetStore = create<BudgetState & BudgetActions>()(
   devtools(
     persist(
       immer((set) => ({
-        income: new Map(),
-        expenses: new Map(),
-        subscriptions: new Map(),
-        buckets: new Map(),
+        budget: {
+          income: {
+            lineItems: [],
+          },
+          expenses: {
+            lineItems: [],
+          },
+        },
         updateState: (updater: (state: Draft<BudgetState>) => void) =>
           set((state) => updater(state)),
+        setBudget: (budget) => {
+          set((state) => {
+            state.budget = budget;
+          });
+        },
       })),
       {
         name: 'budget-storage',

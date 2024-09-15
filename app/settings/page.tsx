@@ -7,7 +7,7 @@ import CalculatorSettingsForm from './calculator-settings';
 const page = () => {
   return (
     <div className='h-full'>
-      <Heading showThemeSwitcher={false}>Settings</Heading>
+      <Heading>Settings</Heading>
       <div>
         <h3 className='text-lg font-medium my-3'>Appearance</h3>
         <p className='text-sm text-muted-foreground my-3'>

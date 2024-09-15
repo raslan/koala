@@ -1,13 +1,13 @@
 import AppIcon from '../icons/app';
+import ClerkBlock from './clerkblock';
 import GlobalTriggerButton from './global-trigger';
-import { ModeToggle } from './mode-toggle';
 
 export const Heading = ({
   children,
-  showThemeSwitcher = true,
+  showClerk = true,
 }: {
   children: React.ReactNode;
-  showThemeSwitcher?: boolean;
+  showClerk?: boolean;
 }) => {
   return (
     <div className='flex justify-between items-center'>
@@ -19,9 +19,9 @@ export const Heading = ({
       </div>
       <div className='flex items-center gap-3'>
         <GlobalTriggerButton />
-        {showThemeSwitcher && (
+        {showClerk && (
           <>
-            <ModeToggle />
+            <ClerkBlock />
           </>
         )}
       </div>

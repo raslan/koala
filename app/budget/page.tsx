@@ -1,11 +1,11 @@
 import { Heading } from '@/components/ui/heading';
-import { BudgetDashboard } from './grid';
+import { BudgetCalculator } from './grid';
 
 const BudgetPage = () => {
   return (
     <div className='h-full'>
-      <Heading>Budget (Demo!)</Heading>
-      <BudgetDashboard />
+      <Heading>Budget</Heading>
+      <BudgetCalculator />
     </div>
   );
 };

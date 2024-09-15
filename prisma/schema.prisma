@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId String  @unique
+  budget Budget[]
+}
+
+model Budget {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  owner    User?    @relation(fields: [ownerId], references: [clerkId])
+  ownerId  String   @unique
+  income  Income?
+  expenses  Expense?
+}
+
+model Income {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  budget    Budget?  @relation(fields: [budgetId], references: [id])
+  budgetId  String   @db.ObjectId @unique
+  lineItems LineItem[]
+}
+
+model Expense {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  budget    Budget?  @relation(fields: [budgetId], references: [id])
+  budgetId  String   @db.ObjectId @unique
+  lineItems LineItem[]
+}
+
+model LineItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  amount    Float
+  category  String
+  frequency String
+  currency  String
+  income    Income? @relation(fields: [incomeId], references: [id])
+  incomeId String? @db.ObjectId
+  expense   Expense? @relation(fields: [expenseId], references: [id])
+  expenseId String? @db.ObjectId
+}

@@ -112,11 +112,11 @@ const PrivacyPolicy = () => {
           <p>
             <strong>Website</strong> refers to Koala, accessible from{' '}
             <a
-              href='https://koala.raslan.dev'
+              href='https://koalify.raslan.dev'
               rel='external nofollow noopener'
               target='_blank'
             >
-              https://koala.raslan.dev
+              https://koalify.raslan.dev
             </a>
           </p>
         </li>

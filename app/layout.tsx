@@ -13,6 +13,7 @@ import { getSelectorsByUserAgent } from 'react-device-detect';
 
 import './globals.css';
 import { themes } from '@/lib/theme';
+import { ClerkProvider } from '@clerk/nextjs';
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -110,14 +111,16 @@ export default function RootLayout({
           disableTransitionOnChange
           themes={themes.map((theme) => theme.theme)}
         >
-          <div className='flex w-full h-full pb-48 md:pb-0'>
-            <Navigation path={path} isMobile={isMobile} />
-            <div className='w-full px-8 md:pl-4 md:pr-8 pt-8 pb-32 overflow-y-auto min-h-screen'>
-              {children}
+          <ClerkProvider>
+            <div className='flex w-full h-full pb-48 md:pb-0'>
+              <Navigation path={path} isMobile={isMobile} />
+              <div className='w-full px-8 md:pl-4 md:pr-8 pt-8 pb-32 overflow-y-auto min-h-screen'>
+                {children}
+              </div>
             </div>
-          </div>
-          <Toaster richColors closeButton />
-          <GlobalSearchBar />
+            <Toaster richColors closeButton />
+            <GlobalSearchBar />
+          </ClerkProvider>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

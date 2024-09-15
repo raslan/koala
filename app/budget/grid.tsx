@@ -1,5 +1,4 @@
 'use client';
-import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -8,106 +7,101 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  faDiscord,
-  faPiedPiper,
-  faSpotify,
-} from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Activity, CreditCard, DollarSign, PlusIcon, Tv } from 'lucide-react';
-import { DataTable } from '../../components/ui/data-table';
-import { prettyPrint } from '@/lib/financial-tokenizer';
-import useCurrency from '@/hooks/useCurrency';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSettingsStore } from '@/store/settings';
 import { Switch } from '@/components/ui/switch';
+import useCurrency from '@/hooks/useCurrency';
+import { calculateInputNumber, prettyPrint } from '@/lib/financial-tokenizer';
+import { useSettingsStore } from '@/store/settings';
+import { Activity, CreditCard, DollarSign, PlusIcon } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  createBudget,
+  createLineItem,
+  getOrCreateUser,
+  getUserBudgets,
+} from '../(actions)';
+import { DataTable } from '@/components/ui/data-table';
+import { useUser } from '@clerk/nextjs';
+import { useBudgetStore } from '@/store/budgets';
+import { CreateItemForm } from './create-item-form';
 
 const quickPrint = (
   amount: { currency: string; value: number },
   notation: 'standard' | 'compact' | 'scientific' | 'engineering' | undefined
 ) =>
-  `${Number(amount.value).toLocaleString('en-US', {
-    style: 'currency',
-    currency: amount.currency,
-    notation,
-  })}`;
+  amount.value
+    ? `${Number(amount.value).toLocaleString('en-US', {
+        style: 'currency',
+        currency: amount.currency,
+        notation,
+      })}`
+    : 'N/A';
 
-const transactions = [
-  {
-    name: 'March 2024 Rent',
-    type: 'Expense',
-    date: '2023-06-23',
-    amount: { value: 250.0, currency: 'USD' },
-  },
-  {
-    name: 'Electric Bill',
-    type: 'Expense',
-    date: '2023-06-24',
-    amount: { value: 150.0, currency: 'EGP' },
-  },
-  {
-    name: 'Groceries',
-    type: 'Expense',
-    date: '2023-06-25',
-    amount: { value: 100.0, currency: 'NOK' },
-  },
-  {
-    name: 'Gym Membership',
-    type: 'Expense',
-    date: '2023-06-27',
-    amount: { value: 50.0, currency: 'SAR' },
-  },
+const exampleIncomeTransactions = [
   {
     name: 'Salary',
-    type: 'Income',
-    date: '2023-06-28',
-    amount: { value: 3000.48, currency: 'EUR' },
+    category: 'General',
+    frequency: 'month',
+    ...calculateInputNumber('USD 5000.23'),
   },
   {
     name: 'Freelance Project',
-    type: 'Income',
-    date: '2023-06-29',
-    amount: { value: 5000.23, currency: 'USD' },
+    category: 'General',
+    frequency: 'year',
+    ...calculateInputNumber('EUR 1000.0'),
   },
   {
     name: 'Bonus',
-    type: 'Income',
-    date: '2023-06-30',
-    amount: { value: 200.0, currency: 'AED' },
+    category: 'General',
+    frequency: 'year',
+    ...calculateInputNumber('GBP 200.0'),
   },
 ];
 
-const subscriptions = [
+const exampleExpenseTransactions = [
   {
-    name: 'Discord Nitro',
-    icon: faDiscord,
-    url: 'www.discord.com',
-    amount: {
-      value: 1999.0,
-      currency: 'EGP',
-    },
+    name: 'March 2024 Rent',
+    category: 'General',
+    frequency: 'month',
+    ...calculateInputNumber('USD 1500.0'),
   },
   {
-    name: 'Spotify',
-    icon: faSpotify,
-    url: 'https://www.spotify.com',
-    amount: {
-      value: 203,
-      currency: 'USD',
-    },
+    name: 'Electric Bill',
+    category: 'General',
+    frequency: 'month',
+    ...calculateInputNumber('EUR 100.0'),
   },
   {
-    name: 'Netflix',
-    url: 'https://netflix.com',
-    amount: {
-      value: 203,
-      currency: 'AED',
-    },
+    name: 'Groceries',
+    category: 'General',
+    frequency: 'day',
+    ...calculateInputNumber('NOK 20.0'),
+  },
+  {
+    name: 'Gym Membership',
+    category: 'General',
+    frequency: 'month',
+    ...calculateInputNumber('SAR 50.0'),
   },
 ];
 
-export function BudgetDashboard() {
-  const { evaluate } = useCurrency();
+async function fetchBudget(setBudget: (budget: any) => void) {
+  const user = await getOrCreateUser();
+  if (user) {
+    const budget = await getUserBudgets();
+    if (budget) {
+      setBudget(budget);
+    } else {
+      const budgetResponse = await createBudget({
+        incomeTransactions: exampleIncomeTransactions,
+        expenseTransactions: exampleExpenseTransactions,
+      });
+      if (budgetResponse) setBudget(budgetResponse);
+    }
+  }
+}
+
+export function BudgetCalculator() {
+  const { evaluate, baseCurrency } = useCurrency();
   const [autoConvert, setAutoConvert] = useState<boolean>(false);
   const { notation } = useSettingsStore();
   const evaluatorFn = useCallback(
@@ -119,23 +113,77 @@ export function BudgetDashboard() {
         : quickPrint(amount, notation),
     [autoConvert, evaluate, notation]
   );
-  const tableTransactions = useMemo(() => {
-    return transactions.map((transaction) => ({
-      ...transaction,
-      amount: evaluatorFn(transaction.amount),
-    }));
-  }, [evaluatorFn]);
+  // API Related budget handling code
+  const { budget, setBudget, updateState } = useBudgetStore();
+  const budgetsLoaded = useRef(false);
+  const { isSignedIn, isLoaded } = useUser();
+  useEffect(() => {
+    if (!budgetsLoaded.current) {
+      if (isSignedIn) fetchBudget(setBudget);
+      budgetsLoaded.current = true;
+    }
+  }, [setBudget, isSignedIn, budget, isLoaded]);
 
-  const convertedSubscriptions = useMemo(() => {
-    return subscriptions.map((subscription) => ({
-      ...subscription,
-      amount: evaluatorFn(subscription.amount),
-    }));
-  }, [evaluatorFn]);
+  const tableValues = useMemo(() => {
+    if (
+      !budget ||
+      !budget?.income?.lineItems?.length ||
+      !budget?.expenses?.lineItems?.length ||
+      !budgetsLoaded.current
+    )
+      return {
+        income: [],
+        expenses: [],
+      };
+    const { income, expenses } = budget ?? { income: [], expenses: [] };
+    const incomeLineItems = income?.lineItems ?? [];
+    const expenseLineItems = expenses?.lineItems ?? [];
+    const totalIncome = incomeLineItems
+      .map((transaction: any) => `${transaction.currency}${transaction.amount}`)
+      .join(' + ');
+    const totalExpenses = expenseLineItems
+      .map((transaction: any) => `${transaction.currency}${transaction.amount}`)
+      .join(' + ');
+    const incomeVsExpenses = `${totalIncome} - ${totalExpenses}`;
+    return {
+      totalIncome: prettyPrint(evaluate(totalIncome, baseCurrency).value, {
+        notation,
+        overrideCurrency: baseCurrency,
+      }),
+      totalExpenses: prettyPrint(evaluate(totalExpenses, baseCurrency).value, {
+        notation,
+        overrideCurrency: baseCurrency,
+      }),
+      incomeVsExpenses: prettyPrint(
+        evaluate(incomeVsExpenses, baseCurrency).value,
+        {
+          notation,
+          overrideCurrency: baseCurrency,
+        }
+      ),
+      income:
+        incomeLineItems?.map((transaction: any) => ({
+          ...transaction,
+          amount: evaluatorFn({
+            value: transaction.amount,
+            currency: transaction.currency,
+          }),
+        })) ?? [],
+      expenses:
+        expenseLineItems?.map((transaction: any) => ({
+          ...transaction,
+          amount: evaluatorFn({
+            value: transaction.amount,
+            currency: transaction.currency,
+          }),
+        })) ?? [],
+    };
+  }, [baseCurrency, budget, evaluate, evaluatorFn, notation, budgetsLoaded]);
+
   return (
     <div className='flex w-full flex-col pb-32 lg:pb-0'>
       <main className='flex flex-1 flex-col gap-4 p-4 md:gap-4 xl:gap-6'>
-        <div className='grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4'>
+        <div className='grid gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-3'>
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
               <CardTitle className='text-sm font-medium'>
@@ -145,68 +193,45 @@ export function BudgetDashboard() {
             </CardHeader>
             <CardContent>
               <div className='text-2xl font-bold'>
-                {evaluatorFn({ value: 45231.89, currency: 'USD' })}
+                {tableValues?.incomeVsExpenses}
               </div>
-              <p className='text-xs text-muted-foreground'>
-                +20.1% from last month
-              </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
               <CardTitle className='text-sm font-medium'>
-                Total Income
+                Total Recurring Income
               </CardTitle>
               <DollarSign className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
               <div className='text-2xl font-bold'>
-                {evaluatorFn({ value: 5401.74, currency: 'USD' })}
+                {tableValues?.totalIncome}
               </div>
-              <p className='text-xs text-muted-foreground'>per month</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
               <CardTitle className='text-sm font-medium'>
-                Total Expenses
+                Total Recurring Expenses
               </CardTitle>
               <CreditCard className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
               <div className='text-2xl font-bold'>
-                {evaluatorFn({ value: 12343.21, currency: 'USD' })}
+                {tableValues?.totalExpenses}
               </div>
-              <p className='text-xs text-muted-foreground'>
-                -19% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>
-                Subscriptions
-              </CardTitle>
-              <Tv className='h-4 w-4 text-muted-foreground' />
-            </CardHeader>
-            <CardContent>
-              <div className='text-2xl font-bold'>
-                {evaluatorFn({ value: 78, currency: 'USD' })}
-              </div>
-              <p className='text-xs text-muted-foreground'>
-                -10% from last month
-              </p>
             </CardContent>
           </Card>
         </div>
-        <div className='grid gap-4 md:gap-8 md:grid-cols-2 lg:grid-cols-3 justify-center lg:justify-normal'>
-          <Card className='lg:col-span-2'>
+        <div className='grid gap-4 md:gap-8 md:grid-cols-2 lg:grid-cols-2 justify-center lg:justify-normal'>
+          <Card className='lg:col-span-1'>
             <CardHeader className='flex flex-col items-start lg:flex-row lg:items-center'>
               <div className='grid gap-2 w-full'>
                 <div className='flex w-full justify-between items-center'>
-                  <CardTitle>Income and Expenses</CardTitle>
+                  <CardTitle>Recurring Income</CardTitle>
                 </div>
-                <CardDescription>Recent transactions.</CardDescription>
+                <CardDescription>List of incomes</CardDescription>
               </div>
               <div className='flex justify-between items-center w-full max-w-64'>
                 <div className='inline-flex items-center scale-90'>
@@ -217,10 +242,33 @@ export function BudgetDashboard() {
                   />
                   Convert
                 </div>
-                <Button size='sm' className='ml-auto gap-1'>
-                  <PlusIcon className='w-4 h-4' />
-                  Add New
-                </Button>
+                <CreateItemForm
+                  baseCurrency={baseCurrency}
+                  formTitle='Add income'
+                  formDescription='Add a new income item'
+                  onDone={async (v: any) => {
+                    const response = await createLineItem({
+                      type: 'income',
+                      parentId: budget?.income?.id as string,
+                      ...v,
+                    });
+                    updateState((state) => {
+                      state.budget.income.lineItems.push(response as any);
+                    });
+                    return response;
+                  }}
+                  defaultValues={{
+                    itemName: '',
+                    amount: `${baseCurrency} 0`,
+                    category: '',
+                    frequency: 'monthly',
+                  }}
+                >
+                  <Button size='sm' className='ml-auto gap-1'>
+                    <PlusIcon className='w-4 h-4' />
+                    Add New
+                  </Button>
+                </CreateItemForm>
               </div>
             </CardHeader>
             <CardContent className='py-0'>
@@ -235,49 +283,79 @@ export function BudgetDashboard() {
                     accessorKey: 'amount',
                   },
                 ]}
-                data={tableTransactions}
+                data={tableValues.income}
                 searchColumn='name'
                 searchableColumnName='Search transactions...'
                 pageSize={5}
               />
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader>
-              <div className='flex justify-between items-center'>
-                <CardTitle>Subscriptions</CardTitle>
-                <Button size='sm' variant='outline' className='gap-2'>
-                  <PlusIcon className='w-4 h-4' />
-                  Add New
-                </Button>
+          <Card className='lg:col-span-1'>
+            <CardHeader className='flex flex-col items-start lg:flex-row lg:items-center'>
+              <div className='grid gap-2 w-full'>
+                <div className='flex w-full justify-between items-center'>
+                  <CardTitle>Recurring Expenses</CardTitle>
+                </div>
+                <CardDescription>List of expenses.</CardDescription>
+              </div>
+              <div className='flex justify-between items-center w-full max-w-64'>
+                <div className='inline-flex items-center scale-90'>
+                  <Switch
+                    className='mr-2'
+                    checked={autoConvert}
+                    onCheckedChange={(checked) => setAutoConvert(checked)}
+                  />
+                  Convert
+                </div>
+                <CreateItemForm
+                  baseCurrency={baseCurrency}
+                  formTitle='Add expense'
+                  formDescription='Add a new expense item'
+                  onDone={async (v: any) => {
+                    const response = await createLineItem({
+                      type: 'expense',
+                      parentId: budget?.expenses?.id as string,
+                      ...v,
+                    });
+                    updateState((state) => {
+                      state.budget.expenses.lineItems.push(response as any);
+                    });
+                    return response;
+                  }}
+                  defaultValues={{
+                    itemName: '',
+                    amount: `${baseCurrency} 0`,
+                    category: '',
+                    frequency: 'monthly',
+                  }}
+                >
+                  <Button size='sm' className='ml-auto gap-1'>
+                    <PlusIcon className='w-4 h-4' />
+                    Add New
+                  </Button>
+                </CreateItemForm>
               </div>
             </CardHeader>
-            <CardContent className='grid gap-8'>
-              {convertedSubscriptions.map((subscription: any, index) => (
-                <div key={index} className='flex items-center gap-4'>
-                  <Avatar className='hidden h-9 w-9 sm:flex rounded-none'>
-                    <FontAwesomeIcon
-                      icon={subscription.icon ?? faPiedPiper}
-                      className='text-sm font-medium leading-none w-full h-full'
-                    />
-                  </Avatar>
-                  <div className='grid gap-1'>
-                    <p className='text-sm font-medium leading-none'>
-                      {subscription.name}
-                    </p>
-                    <p className='text-sm text-muted-foreground hidden lg:block'>
-                      {subscription.url}
-                    </p>
-                  </div>
-                  <div className='ml-auto font-medium'>
-                    {subscription.amount}
-                  </div>
-                </div>
-              ))}
+            <CardContent className='py-0'>
+              <DataTable
+                columns={[
+                  {
+                    header: 'Name',
+                    accessorKey: 'name',
+                  },
+                  {
+                    header: 'Amount',
+                    accessorKey: 'amount',
+                  },
+                ]}
+                data={tableValues.expenses}
+                searchColumn='name'
+                searchableColumnName='Search transactions...'
+                pageSize={5}
+              />
             </CardContent>
           </Card>
         </div>
-        {/* <IconSelector /> */}
       </main>
     </div>
   );
