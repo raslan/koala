@@ -5,9 +5,9 @@ Koala offers a user-friendly interface for performing financial calculations and
 
 ## Stack
 
-- [Next.js](https://nextjs.org/)
+- [Next.js v14](https://nextjs.org/)
 - [React](https://reactjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
+- [Tailwind CSS v3](https://tailwindcss.com/)
 - [MDX](https://mdxjs.com/)
 - [Dinero.js](https://dinerojs.com/)
 - [Framer Motion](https://www.framer.com/api/motion/)
