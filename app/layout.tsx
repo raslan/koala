@@ -85,22 +85,23 @@ export const viewport: Viewport = {
   themeColor: '#09090b',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
   const { isMobile } = getSelectorsByUserAgent(
-    headers().get('user-agent') ?? ''
+    headersList.get('user-agent') ?? '',
   );
-  const path = new URL(headers()?.get('x-url') as string).pathname;
+  const path = new URL(headersList?.get('x-url') as string).pathname;
   return (
     <html className='antialiased' lang='en' suppressHydrationWarning dir='ltr'>
       <head />
       <body
         className={cn(
           'min-h-screen h-full bg-background font-sans antialiased',
-          fontSans.variable
+          fontSans.variable,
         )}
       >
         <ThemeProvider
