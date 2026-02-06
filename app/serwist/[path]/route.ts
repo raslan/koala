@@ -1,9 +1,5 @@
 import { spawnSync } from 'node:child_process';
 import { createSerwistRoute } from '@serwist/turbopack';
-// Import your Next.js configuration so that
-// Serwist can configure the service worker
-// according to your options.
-import nextConfig from '@/next.config.js';
 
 // This is optional!
 // A revision helps Serwist version a precached page. This
@@ -19,7 +15,6 @@ export const { dynamic, dynamicParams, revalidate, generateStaticParams, GET } =
   createSerwistRoute({
     additionalPrecacheEntries: [{ url: '/~offline', revision }],
     swSrc: 'app/sw.ts',
-    nextConfig,
     // If set to `false`, Serwist will attempt to use `esbuild-wasm`.
     useNativeEsbuild: true,
   });
