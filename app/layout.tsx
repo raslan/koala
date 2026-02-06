@@ -1,4 +1,5 @@
 import Navigation from '@/app/navigation';
+import { SerwistProvider } from '@/app/serwist';
 import { ThemeProvider } from '@/components/theme-provider';
 import { GlobalSearchBar } from '@/components/ui/global-search';
 import { Toaster } from '@/components/ui/sonner';
@@ -104,24 +105,26 @@ export default async function RootLayout({
           fontSans.variable,
         )}
       >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-          themes={themes.map((theme) => theme.theme)}
-        >
-          <div className='flex w-full h-full pb-48 md:pb-0'>
-            <Navigation path={path} isMobile={isMobile} />
-            <div className='w-full px-8 md:pl-4 md:pr-8 pt-8 pb-32 overflow-y-auto min-h-screen'>
-              {children}
+        <SerwistProvider swUrl='/serwist/sw.js'>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+            themes={themes.map((theme) => theme.theme)}
+          >
+            <div className='flex w-full h-full pb-48 md:pb-0'>
+              <Navigation path={path} isMobile={isMobile} />
+              <div className='w-full px-8 md:pl-4 md:pr-8 pt-8 pb-32 overflow-y-auto min-h-screen'>
+                {children}
+              </div>
             </div>
-          </div>
-          <Toaster richColors closeButton />
-          <GlobalSearchBar />
-        </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
+            <Toaster richColors closeButton />
+            <GlobalSearchBar />
+          </ThemeProvider>
+          <Analytics />
+          <SpeedInsights />
+        </SerwistProvider>
       </body>
     </html>
   );
