@@ -136,14 +136,6 @@ body {
 }
 
 /*
-  Properly center cmdk
-*/
-
-body > [role='dialog'] {
-  transform: translate(-50%, -50%);
-}
-
-/*
   Black card styling
 .rccs__card--unknown > .rccs__card--front {
   @apply [background:black] border-2 border-primary/40;
