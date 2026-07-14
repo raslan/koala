@@ -1,6 +1,13 @@
 import { SettingsState } from '@/store/settings';
 import * as Currencies from '@dinero.js/currencies';
-import { Dinero, Rates, convert, dinero, toDecimal } from 'dinero.js';
+import {
+  Dinero,
+  DineroCurrency,
+  DineroRates,
+  convert,
+  dinero,
+  toDecimal,
+} from 'dinero.js';
 import { evaluate } from 'mathjs';
 
 type CurrencyRate = {
@@ -8,7 +15,7 @@ type CurrencyRate = {
   scale: number;
 };
 
-const CurrencyMap: Record<string, any> = {};
+const CurrencyMap: Record<string, DineroCurrency<number>> = {};
 for (const key in Currencies) {
   CurrencyMap[key] = Currencies[key as keyof typeof Currencies];
 }
@@ -60,9 +67,13 @@ const dineroFromFloat = ({
   currency,
 }: {
   amount: number;
-  currency: Currencies.Currency<any>;
+  currency: DineroCurrency<number>;
 }) => {
-  const factor = currency.base ** currency.exponent;
+  // Handle base which can be a number or array of numbers
+  const baseValue = Array.isArray(currency.base)
+    ? currency.base[0]
+    : currency.base;
+  const factor = baseValue ** currency.exponent;
   const amount = Math.round(float * factor);
 
   return dinero({ amount, currency });
@@ -115,7 +126,7 @@ const handleSpaces = (inputArray: string[]): string[] => {
 const strToDinero = (
   str: string,
   baseCurrency: string = 'USD',
-  rates: Record<string, CurrencyRate>
+  rates: Record<string, CurrencyRate>,
 ): Dinero<number> => {
   // regex to capture optional decimal part
   const reg: RegExp = /^([A-Z]+)(-?\d+)(?:\.(\d+))?$/;
@@ -136,7 +147,7 @@ const strToDinero = (
     : convert(
         tempDineroObj,
         CurrencyMap[baseCurrency as keyof typeof CurrencyMap],
-        currencyRates as Rates<number>
+        currencyRates as DineroRates<number>,
       );
 };
 
@@ -164,13 +175,13 @@ const extractCurrencyFromDineroStr = (str: string): string => {
 export const getInverseRates = (
   targetCurrency: string,
   baseCurrency: string = 'USD',
-  rates: Record<string, CurrencyRate>
+  rates: Record<string, CurrencyRate>,
 ): Record<string, CurrencyRate> | undefined => {
   const usableRates = rates;
   const targetRate = usableRates[targetCurrency as keyof typeof usableRates];
   if (!targetRate) {
     throw new Error(
-      `Unable to find rate for target currency: ${targetCurrency}`
+      `Unable to find rate for target currency: ${targetCurrency}`,
     );
   }
 
@@ -183,7 +194,7 @@ export const getInverseRates = (
 };
 
 export const convertRatesToDineroFormat = (
-  rates: any
+  rates: any,
 ): Record<string, CurrencyRate> => {
   const usableRates = rates;
   const dineroRates: Record<string, CurrencyRate> = {};
@@ -205,7 +216,7 @@ export const prettyPrint = (
     notation?: SettingsState['notation'];
     currencyDisplay?: 'code' | 'symbol' | 'narrowSymbol' | 'name';
     overrideCurrency?: string;
-  }
+  },
 ) => toDecimal(el as Dinero<number>, createTransformer(formatOptions));
 
 const tokenizeInput = (input: string): string[] =>
@@ -241,7 +252,7 @@ const tokenizeInput = (input: string): string[] =>
           default:
             return match;
         }
-      }
+      },
     )
     .replace(/\b(thousand|million|billion|trillion)\b/g, (match: any) => {
       switch (match.toLowerCase()) {
@@ -262,7 +273,7 @@ const tokenizeInput = (input: string): string[] =>
 export const evaluateNaturalExpression = (
   input: string,
   baseCurrency: string = 'USD',
-  rates: any
+  rates: any,
 ): {
   value: Dinero<number>;
   currency: string;
@@ -274,16 +285,16 @@ export const evaluateNaturalExpression = (
     const formattedTokens = tokens.map((token: string) =>
       /[A-Z]{3,4}/.test(token)
         ? strToDinero(token, baseCurrency, baseCurrencyExchangeRates)
-        : token
+        : token,
     );
     const val = `${baseCurrency}${evaluate(
       formattedTokens
         .map((token) =>
           isDinero(token as Dinero<number>)
             ? toDecimal(token as Dinero<number>)
-            : token
+            : token,
         )
-        .join(' ')
+        .join(' '),
     )}`;
     return {
       value: strToDinero(val, baseCurrency, baseCurrencyExchangeRates),
@@ -291,13 +302,13 @@ export const evaluateNaturalExpression = (
     };
   } catch (error: any) {
     throw new Error(
-      `An error occurred while evaluating the expression: ${error?.message}`
+      `An error occurred while evaluating the expression: ${error?.message}`,
     );
   }
 };
 
 export const calculateInputNumber = (
-  input: string
+  input: string,
 ): {
   currency: string;
   amount: number;
@@ -306,10 +317,10 @@ export const calculateInputNumber = (
     const uniformExpression = tokenizeInput(input);
     const tokens = handleSpaces(uniformExpression).map(cleanString);
     const currency = extractCurrencyFromDineroStr(
-      tokens.find((token: any) => /[A-Z]{3,4}/.test(token)) as string
+      tokens.find((token: any) => /[A-Z]{3,4}/.test(token)) as string,
     );
     const formattedTokens = tokens.map((token: string) =>
-      /[A-Z]{3,4}/.test(token) ? removeCurrencyFromDineroStr(token) : token
+      /[A-Z]{3,4}/.test(token) ? removeCurrencyFromDineroStr(token) : token,
     );
     const amount = evaluate(formattedTokens.join(' '));
     return {
@@ -318,7 +329,7 @@ export const calculateInputNumber = (
     };
   } catch (error: any) {
     throw new Error(
-      `An error occurred while evaluating the expression: ${error?.message}`
+      `An error occurred while evaluating the expression: ${error?.message}`,
     );
   }
 };

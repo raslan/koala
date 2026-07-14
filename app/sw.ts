@@ -1,8 +1,5 @@
-/// <reference no-default-lib="true" />
-/// <reference lib="esnext" />
-/// <reference lib="webworker" />
-import { defaultCache } from '@serwist/turbopack/worker';
-import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist';
+import { defaultCache } from '@serwist/next/worker';
+import type { PrecacheEntry } from 'serwist';
 import { Serwist } from 'serwist';
 
 // This declares the value of `injectionPoint` to TypeScript.
@@ -10,7 +7,7 @@ import { Serwist } from 'serwist';
 // actual precache manifest. By default, this string is set to
 // `"self.__SW_MANIFEST"`.
 declare global {
-  interface WorkerGlobalScope extends SerwistGlobalConfig {
+  interface WorkerGlobalScope {
     __SW_MANIFEST: (PrecacheEntry | string)[] | undefined;
   }
 }
@@ -23,16 +20,6 @@ const serwist = new Serwist({
   clientsClaim: true,
   navigationPreload: true,
   runtimeCaching: defaultCache,
-  fallbacks: {
-    entries: [
-      {
-        url: '/~offline',
-        matcher({ request }) {
-          return request.destination === 'document';
-        },
-      },
-    ],
-  },
 });
 
 serwist.addEventListeners();

@@ -105,7 +105,7 @@ export default async function RootLayout({
           fontSans.variable,
         )}
       >
-        <SerwistProvider swUrl='/serwist/sw.js'>
+        <SerwistProvider swUrl='/sw.js'>
           <ThemeProvider
             attribute='class'
             defaultTheme='system'

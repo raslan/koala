@@ -18,7 +18,7 @@ import TextInput from 'react-autocomplete-input';
 import { toast } from 'sonner';
 
 const fillableCurrencyOptions = currencyOptions?.map?.(
-  (option) => option.label
+  (option) => option.label,
 );
 
 const CalculatorBlock = ({
@@ -51,8 +51,8 @@ const CalculatorBlock = ({
             setResult(
               evaluate(
                 entry?.replace?.(regex, '')?.trim?.() ?? '',
-                currencyCode
-              )
+                currencyCode,
+              ),
             );
           } else {
             setResult(evaluate(entry, baseCurrency));
@@ -72,7 +72,7 @@ const CalculatorBlock = ({
           <Button
             onClick={() => {
               setEntry(
-                '(10k * 2 + 10 * (20k egp + eur10 thousand) / 4 - 5) + 10k'
+                '(10k * 2 + 10 * (20k egp + eur10 thousand) / 4 - 5) + 10k',
               );
               toast.info('Demo equation entered.', {
                 position: 'top-right',
@@ -98,7 +98,10 @@ const CalculatorBlock = ({
           aria-invalid={Boolean(entry && !result)}
           aria-describedby='Calculation-Input'
           maxOptions={1000}
-          onChange={(e: string) => setEntry(e)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement> | string) => {
+            const value = typeof e === 'string' ? e : e.target.value;
+            setEntry(value);
+          }}
           changeOnSelect={(_: any, s: string) => {
             return (
               ' ' +
@@ -115,7 +118,7 @@ const CalculatorBlock = ({
           className={cn(
             'flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
             'text-2xl text-center font-semibold border-primary/20 border-2',
-            small ? 'my-4' : 'mt-4 md:mt-8 py-8 md:pt-16 md:pb-8 md:text-3xl'
+            small ? 'my-4' : 'mt-4 md:mt-8 py-8 md:pt-16 md:pb-8 md:text-3xl',
           )}
         />
         {!small && (
@@ -150,7 +153,7 @@ const CalculatorBlock = ({
                     setEntry(
                       `${prettyPrint(result?.value as Dinero<number>, {
                         currencyDisplay: 'code',
-                      })}`
+                      })}`,
                     );
                 }}
                 variant='ghost'
@@ -165,7 +168,7 @@ const CalculatorBlock = ({
                       entry +
                         ` + ${prettyPrint(result?.value as Dinero<number>, {
                           currencyDisplay: 'code',
-                        })}`
+                        })}`,
                     );
                 }}
                 variant='ghost'
